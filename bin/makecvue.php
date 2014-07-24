@@ -1,0 +1,159 @@
+<?php
+
+//Usage: php makecvue.php -v Web_StaffInfo_vw -i SyStaffID -c EnrollID,SyStudentID
+
+$options = getopt("v:i:c:f::");
+
+/* echo "Gimmie comma delimited fields: "; */
+/* $handle = fopen("php://stdin","r"); */
+/* $fields = fgets($handle); */
+/* if(! trim($fields)){ */
+/*     echo "ABORTING!\n"; */
+/*     exit; */
+/* } */
+$view = $options['v'];
+$identity = $options['i'];
+$colList = $options['c'];
+//$filename = $options['f'];
+$className = 'CVue'.str_replace(array('_vw','Web_'),'',$view);
+
+echo "\n";
+echo "View: $view\n";
+echo "Identity: $identity\n";
+//echo "Filename: $filename\n";
+echo "Class: $className\n";
+echo "Columns:\n ";
+
+$fieldArray = explode(',', $colList);
+echo '* ';
+echo implode("\n * ", $fieldArray);
+echo "\n";
+
+$base = '<?php';
+$base .= "\n/**\n";
+$base .= " * This is the model class for view '$view'.\n";
+$base .= " *\n";
+$base .= " * The followings are the available columns in view '$view':\n";
+$base .= " * @property integer \$$identity\n";
+foreach($fieldArray as $col) {
+    $base .= " * @property string \$$col\n";
+}
+$base .= "\n";
+$base .= " */\n";
+$base .= "class Base$className extends CVueActiveRecord {\n";
+$base .= "\n";
+$base .= "    public \$$identity;\n";
+foreach($fieldArray as $col) {
+    $base .= "    public \$$col;\n";
+}
+$base .= "\n";
+$base .= "    const VIEW = '$view';\n";
+$base .= "    const IDENTITY = '$identity';\n";
+$base .= "    const COLUMNS = '$identity,";
+$base .= implode(',', $fieldArray)."';\n";
+$base .= "    const REQUIRED = '$identity';\n";
+$base .= "\n";
+$base .= "    /**\n";
+$base .= "     * @return array customized attribute labels (name=>label)\n";
+$base .= "     */\n";
+$base .= "    public function attributeLabels() {\n";
+$base .= "        return array(\n";
+$base .= "            '$identity' => '".str_replace('ID', ' ID', $identity)."',\n";
+foreach($fieldArray as $col) {
+    $base .= "            '$col' => '".str_replace('ID', ' ID', $col)."',\n";
+}
+$base .= "        );\n";
+$base .= "    }\n";
+$base .= "\n";
+$base .= "    /**\n";
+$base .= "     * Retrieves a list of models based on the current search/filter conditions.\n";
+$base .= "     *\n";
+$base .= "     * Typical usecase:\n";
+$base .= "     * - Initialize the model fields with values from filter form.\n";
+$base .= "     * - Execute this method to get CActiveDataProvider instance which will filter\n";
+$base .= "     * models according to data in model fields.\n";
+$base .= "     * - Pass data provider to CGridView, CListView or any similar widget.\n";
+$base .= "     *\n";
+$base .= "     * @return CActiveDataProvider the data provider that can return the models\n";
+$base .= "     * based on the search/filter conditions.\n";
+$base .= "     */\n";
+
+$base .= "    public function __toString(){\n";
+$base .= "        $this->$identity\n";
+$base .= "    }\n";
+
+$base .= "    public function search() {\n";
+$base .= "        // @todo Please modify the following code to remove attributes that should not be searched.\n";
+$base .= "\n";
+$base .= "        \$criteria = new CDbCriteria;\n";
+$base .= "\n";
+$base .= "        \$criteria->compare('$identity', \$this->$identity);\n";
+foreach($fieldArray as $col) {
+    $base .= "        \$criteria->compare('$col', \$this->\$$col, true);\n";
+}
+$base .= "\n";
+$base .= "        \$sort = new CSort();\n";
+
+$base .= "        \$sort->attributes = array(\n";
+$base .= "            '$identity' => array(\n";
+$base .= "                'asc' => '$identity asc',\n";
+$base .= "                'desc' => '$identity desc',\n";
+$base .= "                'default' => 'asc'\n";
+$base .= "            ),\n";
+
+foreach($fieldArray as $col) {
+    $base .= "            '$col' => array(\n";
+    $base .= "                'asc' => '$col asc',\n";
+    $base .= "                'desc' => '$col desc',\n";
+    $base .= "                'default' => 'asc'\n";
+    $base .= "            ),\n";
+}
+$base .= "        );\n";
+
+$base .= "        \$sort->defaultOrder = array('$identity' => CSort::SORT_ASC);\n";
+$base .= "\n";
+$base .= "\n";
+$base .= "        return new CActiveDataProvider(\$this, array(\n";
+$base .= "            'criteria' => \$criteria,\n";
+$base .= "            'sort' => \$sort,\n";
+$base .= "            'pagination' => array(\n";
+$base .= "                'pageSize' => ".'Yii::app()->params[\'db_default_query_limit\']'.",\n";
+$base .= "            ),\n";
+$base .= "        ));\n";
+$base .= "\n";
+$base .= "    }\n";
+
+$base .= "\n";
+$base .= "	/**\n";
+$base .= "	 * Returns the static model of the specified AR class.\n";
+$base .= "	 * Please note that you should have this exact method in all your CActiveRecord descendants!\n";
+$base .= "	 * @param string $className active record class name.\n";
+$base .= "	 * @return Pages the static model class\n";
+$base .= "	 */\n";
+$base .= "	public static function model(\$className=__CLASS__)\n";
+$base .= "	{\n";
+$base .= "		return parent::model(\$className);\n";
+$base .= "	}\n";
+$base .= "\n";
+
+$base .= "    public function findByPk(\$pk, \$condition = '', \$params = Array()){\n";
+$base .= "        return self::model()->findByAttributes(array(self::IDENTITY=>\$pk));\n";
+$base .= "    }\n";
+
+$base .= "}\n";
+
+$base .= "\n";
+
+//rewrite base no matter what
+file_put_contents('Base'.$className.'.php', $base);
+
+$base = '<?php';
+$base .= "\n";
+$base .= "\n";
+$base .= "class $className extends Base$className {\n";
+$base .= "\n";
+$base .= "}\n";
+$base .= "\n";
+
+//only make if it's not there
+if(!file_exists($className.'.php')) file_put_contents($className.'.php', $empty);
