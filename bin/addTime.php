@@ -72,7 +72,7 @@ if(! $project = $projectGetter->getByName($projectName)) {
         $project = new FreshBooks_Project();
         $project->name = ucfirst($projectName);
         $project->clientId = $client->clientId;
-        $project->rate = "55";
+        $project->rate = $rate;
         $project->billMethod = "project-rate";
 
         $task = getTask($taskName);
