@@ -17,7 +17,7 @@ GetOptions(\%args,
            "verbose",
            "debug");
 
-my $addPath = "~/Dropbox/bin/addTime.php";
+my $addPath = "~/github/bin/addTime.php";
 my $fbUser = "Ashton"; #freshbooks user
 
 my $start = `date +"%R"`;

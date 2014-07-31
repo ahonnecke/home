@@ -1,8 +1,11 @@
+#!/usr/bin/php
 <?php
 
-//Usage: php makecvue.php -v Web_StaffInfo_vw -i SyStaffID -c EnrollID,SyStudentID
+$usage = "Usage: \n    makecvue.php -v Web_StaffInfo_vw -i SyStaffID -c EnrollID,SyStudentID \n\n";
 
 $options = getopt("v:i:c:f::");
+
+if(empty($options)) die($usage);
 
 /* echo "Gimmie comma delimited fields: "; */
 /* $handle = fopen("php://stdin","r"); */
@@ -24,10 +27,14 @@ echo "Identity: $identity\n";
 echo "Class: $className\n";
 echo "Columns:\n ";
 
-$fieldArray = explode(',', $colList);
+$fieldArray = explode(',', str_replace(' ', '', $colList));
 echo '* ';
 echo implode("\n * ", $fieldArray);
 echo "\n";
+
+if($key = array_search($identity, $fieldArray)) {
+    unset($fieldArray[$key]);
+}
 
 $base = '<?php';
 $base .= "\n/**\n";
@@ -79,7 +86,7 @@ $base .= "     * based on the search/filter conditions.\n";
 $base .= "     */\n";
 
 $base .= "    public function __toString(){\n";
-$base .= "        $this->$identity\n";
+$base .= "        echo \$this->$identity;\n";
 $base .= "    }\n";
 
 $base .= "    public function search() {\n";
@@ -147,13 +154,13 @@ $base .= "\n";
 //rewrite base no matter what
 file_put_contents('Base'.$className.'.php', $base);
 
-$base = '<?php';
-$base .= "\n";
-$base .= "\n";
-$base .= "class $className extends Base$className {\n";
-$base .= "\n";
-$base .= "}\n";
-$base .= "\n";
+$empty = '<?php';
+$empty .= "\n";
+$empty .= "\n";
+$empty .= "class $className extends Base$className {\n";
+$empty .= "\n";
+$empty .= "}\n";
+$empty .= "\n";
 
 //only make if it's not there
 if(!file_exists($className.'.php')) file_put_contents($className.'.php', $empty);

@@ -46,7 +46,7 @@ $password = 'nothing1';
 /* } */
 
 //include particular file for entity you need (Client, Invoice, Category...)
-require "/Users/ahonnecke/Dropbox/library/Rally.php";
+require "/Users/ahonnecke/github/library/Rally.php";
 
 use Yahoo\Connectors\Rally;
 

@@ -31,7 +31,7 @@ my $dayEnd = `date +"%R"`.":00";
 my $day = 0;
 my $start = "08:15:00";
 my $end = "17:00:00";
-my $addPath = "~/Dropbox/bin/addTime.php";
+my $addPath = "~/github/bin/addTime.php";
 my $fbUser = "Ashton"; #freshbooks user
 my $log = 0;
 my $verbose = 0;
@@ -57,7 +57,8 @@ my @timeEntries = ();
 if($args{yesterday}) {
     $reportDate = `last_workday.sh`;
     chomp($reportDate);
-    $after = $reportDate;
+    $after = $reportDate; #should be  2 days ago
+#    $before = `date +"%Y-%m-%d"`; should get yesterday's number
     
     #if its monday, and we pass in yesterday pretend its friday
     if($weekdayNum == 1) {
