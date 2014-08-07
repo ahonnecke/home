@@ -151,8 +151,11 @@ $base .= "}\n";
 
 $base .= "\n";
 
+$fileName = $className.'.php';
+$baseName = 'Base'.$fileName;
+
 //rewrite base no matter what
-file_put_contents('Base'.$className.'.php', $base);
+file_put_contents($baseName, $base);
 
 $empty = '<?php';
 $empty .= "\n";
@@ -162,5 +165,9 @@ $empty .= "\n";
 $empty .= "}\n";
 $empty .= "\n";
 
+
 //only make if it's not there
-if(!file_exists($className.'.php')) file_put_contents($className.'.php', $empty);
+if(!file_exists($fileName)) file_put_contents($fileName, $empty);
+
+echo exec("php -l $baseName")."\n";
+echo exec("php -l $fileName")."\n";
