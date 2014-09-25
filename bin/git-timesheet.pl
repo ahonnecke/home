@@ -91,7 +91,7 @@ if($args{project}) { $project = $args{project}; }
 chomp $reportDate;
 chomp $dayEnd;
 
-`cd $path && git fetch`;
+`cd $path && git fetch --all --quiet`;
 my $dataCommand = " git log --pretty=format:\"%ad::%an::%d::%B\" ";
 $dataCommand .= " --reverse --all --author=$author --date=local";
 
@@ -134,7 +134,14 @@ foreach my $commit (@commits) {
     my $s1 = str2time( $lastTime );
     my $s2 = str2time( $time );
     
-    my $spent = ($s2 - $s1)/60/60;
+    my $spent = abs(($s2 - $s1)/60/60);
+
+    #if hours is more than 24 that bug is back,
+    #mod it by 2 to get some time, but not a crazy amount
+    if( $spent >= 24 ) {
+        $spent = ($spent % 2);
+    }
+    
     my $int = int($spent);
 
     chomp($branch);
