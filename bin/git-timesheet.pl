@@ -66,17 +66,19 @@ if($args{yesterday}) {
     } else {
         $weekdayNum = $weekdayNum=1;
     }
-}elsif($args{day}) {    
+} elsif($args{day}) {    
     $day = sprintf("%02d", $args{day});
     
     $reportDate = `date +"%Y-%m-$day"`;
-    $dayEnd = "17:00:00";
-} else {
-    if($args{after}) { $after = $args{after}; }
-    if($args{before}) { $before = $args{before}; }
+    print $reportDate;
     
+    $dayEnd = "17:00:00";
+} else {    
     $reportDate = `date +"%Y-%m-%d"`;
 }
+if($args{after}) { $after = $args{after}; }
+if($args{before}) { $before = $args{before}; }
+
 if($args{log}) { $log = $args{log}; }
 if($args{verbose}) { $verbose = $args{verbose}; }
 if($args{debug}) { $debug = $args{debug}; }

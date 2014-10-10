@@ -36,9 +36,16 @@ if($key = array_search($identity, $fieldArray)) {
     unset($fieldArray[$key]);
 }
 
+$command = "makecvue.php"
+    . " -v $view "
+    . " -i $identity "
+    . " -c $colList";
+
 $base = '<?php';
 $base .= "\n/**\n";
 $base .= " * This is the model class for view '$view'.\n";
+$base .= " * It was automatically generated with the following command\n";
+$base .= " * $command\n";
 $base .= " *\n";
 $base .= " * The followings are the available columns in view '$view':\n";
 $base .= " * @property integer \$$identity\n";
@@ -96,7 +103,7 @@ $base .= "        \$criteria = new CDbCriteria;\n";
 $base .= "\n";
 $base .= "        \$criteria->compare('$identity', \$this->$identity);\n";
 foreach($fieldArray as $col) {
-    $base .= "        \$criteria->compare('$col', \$this->\$$col, true);\n";
+    $base .= "        \$criteria->compare('$col', \$this->$col, true);\n";
 }
 $base .= "\n";
 $base .= "        \$sort = new CSort();\n";

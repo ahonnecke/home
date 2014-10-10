@@ -64,10 +64,12 @@ FreshBooks_HttpClient::init($url,$token);
 //new Project object
 $projectGetter = new FreshBooks_Project();
 
-if(! $project = $projectGetter->getByName($projectName)) {
+if(!$project = $projectGetter->getByName($projectName)) {
+    echo "Unable to find project '$projectName' ";
 
     $clientGetter = new FreshBooks_Client();
     if($client = $clientGetter->getByName($clientName)) {
+        echo "Got client '$clientName'";
     
         $project = new FreshBooks_Project();
         $project->name = ucfirst($projectName);
@@ -78,7 +80,7 @@ if(! $project = $projectGetter->getByName($projectName)) {
         $task = getTask($taskName);
 
         if(!$task) {
-            die("Unable to get task\n");
+            die("Unable to get task $taskName\n");
         }
         
         $project->tasks = array($task->taskId);
