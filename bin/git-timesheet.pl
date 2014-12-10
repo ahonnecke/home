@@ -9,6 +9,7 @@ use Data::Dumper;
 my %args;
 GetOptions(\%args,
            "day=s",
+           "month=s",
            "start=s",
            "end=s",
            "path=s",
@@ -28,7 +29,8 @@ my $dateTitle = `date | sed -e 's/MDT//g'`;
 my $reportDate = 0;
 
 my $dayEnd = `date +"%R"`.":00";
-my $day = 0;
+my $day = `date +"%d"`;
+my $month = `date +"%m"`;
 my $start = "08:15:00";
 my $end = "17:00:00";
 my $addPath = "~/github/bin/addTime.php";
@@ -49,35 +51,51 @@ my $output = '';
 my @outputs = ();
 my $totalTime = 0;
 my $cols=150;
+my $tomorrowNum=0;
 my $timePrintfString = "| %5s | %8s | %8s | %-25s | %8s | %-40s \n";
 my $timePrintfDebugString = "| %5s | %8s | %8s | %-20s | %-60s | %8s | %-40s \n";
 
 my @timeEntries = ();
 
 if($args{yesterday}) {
-    $reportDate = `last_workday.sh`;
-    chomp($reportDate);
-    $after = $reportDate; #should be  2 days ago
-#    $before = `date +"%Y-%m-%d"`; should get yesterday's number
+#     $reportDate = `last_workday.sh`;
+#     chomp($reportDate);
+#     $after = $reportDate; #should be  2 days ago
+# #    $before = `date +"%Y-%m-%d"`; should get yesterday's number
     
-    #if its monday, and we pass in yesterday pretend its friday
-    if($weekdayNum == 1) {
-        $weekdayNum = 5;
-    } else {
-        $weekdayNum = $weekdayNum=1;
-    }
-} elsif($args{day}) {    
-    $day = sprintf("%02d", $args{day});
-    
-    $reportDate = `date +"%Y-%m-$day"`;
-    print $reportDate;
-    
-    $dayEnd = "17:00:00";
-} else {    
-    $reportDate = `date +"%Y-%m-%d"`;
+#     #if its monday, and we pass in yesterday pretend its friday
+#     if($weekdayNum == 1) {
+#         $weekdayNum = 5;
+#     } else {
+#         $weekdayNum = $weekdayNum=1;
+#     }
+    $args{day} = $weekdayNum - 1;
 }
+
 if($args{after}) { $after = $args{after}; }
 if($args{before}) { $before = $args{before}; }
+
+chomp $month;
+
+if($args{day}) {
+    #don't check for month unless they passed in day
+    if($args{month}) { $month = $args{month}; }
+    chomp $month;
+
+    $day = sprintf("%02d", $args{day});
+    $tomorrowNum = $day+1;
+    
+    $reportDate = `date +"%Y-$month-$day"`;
+    
+    # $dayEnd = "17:00:00";
+    $after = `date +"%Y-$month-$day"`;
+    $before = `date +"%Y-$month-$tomorrowNum"`;
+    chomp $after;
+    chomp $before;
+    $dateTitle =  "From $after to $before";
+} else {    
+    $reportDate = `date +"%Y-$month-%d"`;
+}
 
 if($args{log}) { $log = $args{log}; }
 if($args{verbose}) { $verbose = $args{verbose}; }
@@ -92,6 +110,8 @@ if($args{project}) { $project = $args{project}; }
 
 chomp $reportDate;
 chomp $dayEnd;
+chomp $after;
+chomp $before;
 
 `cd $path && git fetch --all --quiet`;
 my $dataCommand = " git log --pretty=format:\"%ad::%an::%d::%B\" ";
