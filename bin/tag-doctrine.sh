@@ -35,7 +35,7 @@ if [ -z "${GOTIME}" ]; then
     echo $PUSHTAG
     $PUSHTAG
 
-    SLACK_TOKEN=xoxp-3255517620-14186594246-18207026423-9094019553
+    ~/bin/ashbot.sh
     slackcli --username="ashbot" -h development -m "Tagging doctrine ($TAG)" \
              -i="http://pixelstub.com/images/robot_coral_small.png"
 fi
