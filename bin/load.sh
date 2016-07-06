@@ -1,6 +1,8 @@
 #!/bin/bash
 
+i='CMS';
+
 echo Loading
-pv ~/www/havenly/local-production.sql | mysql -h192.168.33.12 -uroot -proot CMS
-mysql -h192.168.33.12 -uroot -proot CMS < /Users/ahonnecke/sql/scrub_personal_info.sql
+pv /tmp/local.sql | mysql -h192.168.33.12 -uroot -proot $i
 echo Loaded
+mysql -h vagrant -u root -proot $i < ~/sql/create-test-data.sql;
