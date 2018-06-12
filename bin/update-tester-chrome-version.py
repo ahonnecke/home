@@ -3,7 +3,6 @@
 import re
 
 import requests
-from trepan.api import debug
 
 import git
 
@@ -12,7 +11,7 @@ chrome_version = response.text.replace("'", "")
 
 print(f'Found chrome version {chrome_version}')
 
-web_repo = git.Repo("/Users/ahonnecke/Code/repos/web/")
+web_repo = git.Repo("/Users/ahonnecke/Code/repos/web-batch/")
 git = web_repo.git
 circlefile = "/Users/ahonnecke/Code/repos/web/.circleci/config.yml"
 
@@ -43,7 +42,6 @@ with open(circlefile, "w") as writer:
     writer.close()
 
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
-
 if changedFiles:
     web_repo.index.add(changedFiles)
     git.commit('-m', f'Updating chrome version to {chrome_version}')
