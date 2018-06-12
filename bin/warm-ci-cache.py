@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from time import sleep
+
 import git
 
 web_repo = git.Repo("/Users/ahonnecke/Code/repos/web/")
@@ -12,11 +14,14 @@ print(f'Active Branch: {branch.name}')
 
 config_filename = "/Users/ahonnecke/Code/repos/web/.circleci/config.yml"
 
-for x in range(0, 1):
+for x in range(0, 20):
+    print(f'Pushing {x}...')
     with open(config_filename, "a") as config_file:
         config_file.write(f'# {x} units warmer\n')
         config_file.close()
 
     web_repo.index.add([config_filename])
     web_repo.git.commit('-m', 'warming circleCI')
-    web_repo.remotes.origin.push(refspec=f'{branch}:{branch}')
+<    web_repo.remotes.origin.push(refspec=f'{branch}:{branch}')
+    print(f'Sleeping after {x}...')
+    sleep(600)
