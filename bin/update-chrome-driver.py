@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+import os
 import re
 
 import requests
 
 import git
+from github import Github, GithubException
 
 response = requests.get('http://chromedriver.storage.googleapis.com/LATEST_RELEASE')
 chrome_version = response.text.replace("'", "")
@@ -15,8 +17,12 @@ web_repo = git.Repo("/Users/ahonnecke/Code/repos/web-batch/")
 git = web_repo.git
 circlefile = "/Users/ahonnecke/Code/repos/web-batch/docker/Dockerfile.test"
 
-for remote in web_repo.remotes:
-    remote.fetch()
+g = Github(os.environ['SERVICEDADTOKEN'])
+
+try:
+    org = g.get_organization('digital-assets-data')
+except GithubException as ghe:
+    print(ghe)
 
 new_branch = f'chrome-version-{chrome_version}'
 
@@ -53,3 +59,14 @@ if changedFiles:
     web_repo.index.add(changedFiles)
     git.commit('-m', f'Updating chrome version to {chrome_version}')
     git.push('-v', 'origin', new_branch)
+
+    base = "master"
+    head = f'ahonnecke:{new_branch}'
+    print(f'Opening PR to merge "{head}" into "{base}"')
+    web_repo = org.get_repo('web')
+    web_repo.create_pull(
+        title=f'Update chrome-driver to version {chrome_version}',
+        body="Scripted update for the chrome driver version",
+        base=base,
+        head=head
+    )
