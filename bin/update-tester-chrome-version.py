@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
 
+import json
 import re
 
 import requests
+from trepan.api import debug
 
 import git
 
-response = requests.get('http://chromedriver.storage.googleapis.com/LATEST_RELEASE')
-chrome_version = response.text.replace("'", "")
+exit()
+# I think that this one is deprecated, but keeping around just in case
 
-print(f'Found chrome version {chrome_version}')
+response = requests.get('https://registry.hub.docker.com/v1/repositories/ubuntu/tags')
+json_data = json.loads(response.text)
+bionic_tags = list(filter(lambda x: 'bionic' in x['name'], json_data))
+latest_tag = bionic_tags[-1:][0]['name']
+
+print(f'Found bionic version {latest_tag}')
 
 web_repo = git.Repo("/Users/ahonnecke/Code/repos/web-batch/")
 git = web_repo.git
-circlefile = "/Users/ahonnecke/Code/repos/web/.circleci/config.yml"
+circlefile = "/Users/ahonnecke/Code/repos/web-batch/docker/Dockerfile.test"
 
 for remote in web_repo.remotes:
     remote.fetch()
 
-new_branch = f'chrome-version-{chrome_version}'
+new_branch = f'bionic-version-{latest_tag}'
 
 git.reset('--hard', 'upstream/master')
 git.checkout('upstream/master')
@@ -31,8 +38,8 @@ git.checkout('-b', new_branch, 'upstream/master')
 with open(circlefile, 'r') as reader:
     content = reader.read()
     content_new = re.sub(
-        '              --build-arg chromedriver_version=.*',
-        r'              --build-arg chromedriver_version=' + str(chrome_version) + ' \\\\',
+        'FROM ubuntu:.*',
+        r'FROM ubuntu:' + str(latest_tag),
         content,
         flags=re.M
     )
@@ -44,5 +51,5 @@ with open(circlefile, "w") as writer:
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
 if changedFiles:
     web_repo.index.add(changedFiles)
-    git.commit('-m', f'Updating chrome version to {chrome_version}')
+    git.commit('-m', f'Updating bionic version to {latest_tag}')
     git.push('-v', 'origin', new_branch)

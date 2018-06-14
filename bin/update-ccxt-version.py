@@ -4,8 +4,6 @@ import json
 import os
 from subprocess import call
 
-from trepan.api import debug
-
 import git
 from github import Github, GithubException
 
@@ -51,9 +49,9 @@ latest_ccxt_version = raw_ccxt_version.replace("'", "").replace('=', '')
 
 print(f'Current CCXT version is {latest_ccxt_version}')
 
-# call(['git', 'fetch', '--all'])
-# git.fetch('--all')
-# remote_branches = git.branch('-r')
+call(['git', 'fetch', '--all'])
+git.fetch('--all')
+remote_branches = git.branch('-r')
 
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
 
@@ -61,13 +59,10 @@ if current_ccxt_version != latest_ccxt_version:
     print("Pipfile.lock has changed")
     new_branch = f'ccxt-{latest_ccxt_version}'
 
-    # full = f'origin/{new_branch}'
-    # if full in remote_branches:
-    #     from trepan.api import debug
-    #     debug()
-
-    #     print(f'"{full}" already exists... bye')
-    #     exit(0)
+    full = f'origin/{new_branch}'
+    if full in remote_branches:
+        print(f'"{full}" already exists... bye')
+        exit(0)
 
     try:
         git.branch('-D', new_branch)

@@ -3,6 +3,7 @@
 import json
 import os
 import re
+from subprocess import call
 
 import requests
 
@@ -24,6 +25,15 @@ for remote in web_repo.remotes:
     remote.fetch()
 
 new_branch = f'bionic-version-{latest_tag}'
+
+call(['git', 'fetch', '--all'])
+git.fetch('--all')
+remote_branches = git.branch('-r')
+
+full = f'origin/{new_branch}'
+if full in remote_branches:
+    print(f'"{full}" already exists... bye')
+    exit(0)
 
 git.reset('--hard', 'upstream/master')
 git.checkout('upstream/master')

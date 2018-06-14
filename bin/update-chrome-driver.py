@@ -2,6 +2,7 @@
 
 import os
 import re
+from subprocess import call
 
 import requests
 
@@ -28,11 +29,21 @@ new_branch = f'chrome-version-{chrome_version}'
 
 git.reset('--hard', 'upstream/master')
 git.checkout('upstream/master')
+
+call(['git', 'fetch', '--all'])
+git.fetch('--all')
+remote_branches = git.branch('-r')
+
 try:
     git.branch('-D', new_branch)
 except:
     pass
 git.checkout('-b', new_branch, 'upstream/master')
+
+full = f'origin/{new_branch}'
+if full in remote_branches:
+    print(f'"{full}" already exists... bye')
+    exit(0)
 
 with open(circlefile, 'r') as reader:
     content = reader.read()
