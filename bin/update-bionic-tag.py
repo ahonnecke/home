@@ -77,8 +77,8 @@ if changedFiles:
     print(f'Opening PR to merge "{head}" into "{base}"')
     web_repo = org.get_repo('web')
     web_repo.create_pull(
-        title=f'Update ccxt to version {latest_tag}',
-        body="Scripted update for the bionic tag",
+        title=f'Update docker from tag to {latest_tag}',
+        body="Scripted update for the base ubuntu tag",
         base=base,
         head=head
     )
