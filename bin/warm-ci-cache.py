@@ -77,7 +77,9 @@ except:
 #     head=head
 # )
 
-for x in range(0, 1):
+num = input("How many times brah?: ")
+
+for x in range(0, int(num)):
     print(f'Pushing {x}...')
     with open(cache_warmer_filename, "a") as cache_warmer_file:
         cache_warmer_file.write(f'# {x} units warmer\n')
