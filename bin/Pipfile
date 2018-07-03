@@ -9,6 +9,9 @@ name = "pypi"
 
 "flake8" = "*"
 pygithub = "*"
+diceware = "*"
+requests = "*"
+gitpython = "*"
 
 
 [dev-packages]
