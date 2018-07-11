@@ -6,6 +6,7 @@ import sys
 from subprocess import call
 
 import git
+
 from github import Github, GithubException
 
 web_repo = git.Repo("/Users/ahonnecke/Code/repos/web-batch/")
@@ -51,7 +52,7 @@ json_data = json.loads(lock_data)
 raw_version = json_data['default'][lib]['version']
 latest_version = raw_version.replace("'", "").replace('=', '')
 
-print(f'Current CCXT version is {latest_version}')
+print(f'Latest {lib} version is {latest_version}')
 
 call(['git', 'fetch', '--all'])
 git.fetch('--all')
@@ -87,7 +88,11 @@ if current_version != latest_version:
     web_repo = org.get_repo('web')
     web_repo.create_pull(
         title=f'Update {lib} to version {latest_version}',
-        body=f'Scripted update for the {LIB} library',
+        body=f'Scripted update for the {lib} library',
         base=base,
         head=head
     )
+else:
+    print(f'{lib} version is the same as in master, no PR created')
+    git.checkout('master')
+    git.reset('--hard', 'upstream/master')
