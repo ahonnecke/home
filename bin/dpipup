@@ -9,9 +9,10 @@ import git
 
 from github import Github, GithubException
 
-web_repo = git.Repo("/Users/ahonnecke/Code/repos/web-batch/")
+repo_path = "/Users/ahonnecke/Code/repos/web-batch/"
+web_repo = git.Repo(repo_path)
 git = web_repo.git
-lock_file_name = "/Users/ahonnecke/Code/repos/web-batch/Pipfile.lock"
+lock_file_name = f'{repo_path}Pipfile.lock'
 lib = sys.argv[1]
 
 print(f'Updating {lib}')
@@ -22,7 +23,7 @@ for remote in web_repo.remotes:
 git.checkout('master')
 git.reset('--hard', 'upstream/master')
 
-os.chdir("/Users/ahonnecke/Code/repos/web-batch/server")
+os.chdir(f'{repo_path}server')
 
 g = Github(os.environ['SERVICEDADTOKEN'])
 
@@ -57,7 +58,7 @@ print(f'Latest {lib} version is {latest_version}')
 call(['git', 'fetch', '--all'])
 git.fetch('--all')
 remote_branches = git.branch('-r')
-
+g
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
 
 if current_version != latest_version:
