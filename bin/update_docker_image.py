@@ -38,6 +38,9 @@ DOCKERACCT = 'ahonnecke'
 SRCREMOTE = 'upstream'
 SRCBRANCH = 'master'
 SRCPATH = f'{SRCREMOTE}/{SRCBRANCH}'
+IMGBASENAME = 'dad-base-image'
+BASEDOCKERPATH = 'docker/Dockerfile.base'
+TESTDOCKERPATH = 'docker/Dockerfile.test'
 
 
 def get_chrome_driver_version():
@@ -67,8 +70,8 @@ print(f'Operating on repo: {repo_path}')
 build_dir = os.path.dirname(os.path.dirname(os.path.dirname(repo_path))) + '/'
 print(f'Build Dir: {build_dir}')
 
-base_dockerfile = f'{repo_path}docker/Dockerfile.base'
-test_dockerfile = f'{repo_path}docker/Dockerfile.test'
+base_dockerfile = f'{repo_path}{BASEDOCKERPATH}'
+test_dockerfile = f'{repo_path}{TESTDOCKERPATH}'
 
 chrome_version = get_chrome_driver_version()
 print(f'Latest chrome version {chrome_version}')
@@ -78,11 +81,11 @@ ubuntu_tag = get_bionic_version()
 print(f'Latest version {ubuntu_tag}')
 
 ts = int(time.time())
-tag = f'dad-base-image-{ubuntu_tag}-{chrome_version}-{ts}'
+tag = f'{IMGBASENAME}-{ubuntu_tag}-{chrome_version}-{ts}'
 remote_tag = f'{GITUSERNAME}/{tag}'
 
-web_repo = git.Repo(repo_path)
-git = web_repo.git
+repo_instance = git.Repo(repo_path)
+git = repo_instance.git
 
 if not args.keep:
     git.reset('--hard', SRCPATH)
@@ -153,11 +156,11 @@ create_new_branch(tag)
 update_base_dockerfile(base_dockerfile)
 update_test_dockerfile(test_dockerfile)
 
-changedFiles = [item.a_path for item in web_repo.index.diff(None)]
+changedFiles = [item.a_path for item in repo_instance.index.diff(None)]
 if True or changedFiles:
     print(f'There are local changes, branching from master to {tag}')
 
-    web_repo.index.add(changedFiles)
+    repo_instance.index.add(changedFiles)
 
     if args.dryrun:
         print('Exiting... with local changes still in place')
@@ -183,9 +186,9 @@ if True or changedFiles:
     try:
         g = Github(GITHUBTOKEN)
         org = g.get_organization(ORGNAME)
-        web_repo = org.get_repo(REPONAME)
+        repo_instance = org.get_repo(REPONAME)
 
-        web_repo.create_pull(
+        repo_instance.create_pull(
             title=f'Point Dockerfile.test at new base image {remote_tag}',
             body=f'Automatically created PR that points the tester dockerfile at the new base image that was created from update_base_image.py',
             base=SRCBRANCH,
