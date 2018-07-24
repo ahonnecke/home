@@ -25,6 +25,7 @@ if [ ! -f $DUMPFILE ]; then
     echo "Confirmed Tunnel"
     echo "Dumping from $DEV_DB_NAME to $DUMPFILE"
 
+    mysqldump --add-drop-database -h127.0.0.1 -udebug -P33065 -p $DEV_DB_NAME > $DUMPFILE
 fi
 
 ll $DUMPFILE
