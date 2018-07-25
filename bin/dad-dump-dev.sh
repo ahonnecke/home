@@ -4,7 +4,7 @@ DUMPFILE="/tmp/dad-dev.sql"
 FIXFILE="/Users/ahonnecke/sql/fix-dad-data.sql"
 
 DEV_DB_NAME='dad'
-LOCAL_DB_NAME='newdev'
+LOCAL_DB_NAME='dev'
 
 echo "Downloading raw dump from dev"
 
@@ -28,7 +28,7 @@ if [ ! -f $DUMPFILE ]; then
     mysqldump --add-drop-database -h127.0.0.1 -udebug -P33065 -p $DEV_DB_NAME > $DUMPFILE
 fi
 
-ll $DUMPFILE
+ls -l $DUMPFILE
 echo "db dumped to $DUMPFILE"
 
 mysql -uroot -proot -e "DROP DATABASE IF EXISTS $LOCAL_DB_NAME"
