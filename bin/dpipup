@@ -1,14 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3
 
 import argparse
 import json
 import os
-import sys
 from subprocess import call
 
 import git
-from trepan.api import debug
-
 from github import Github, GithubException
 
 parser = argparse.ArgumentParser(description='Update a library')
@@ -93,7 +90,7 @@ if current_version != latest_version:
 
     try:
         git.branch('-D', new_branch)
-    except:
+    except BaseException:
         #         # @todo: find a better way to check for a branch
         # git.rev_parse('--verify', new_branch)
         pass
