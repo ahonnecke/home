@@ -44,33 +44,3 @@ mysql -uroot -proot $LOCAL_DB_NAME < $DUMPFILE
 echo "Done loading dump"
 
 mysql -uroot -proot $LOCAL_DB_NAME < $FIXFILE
-
-# call([
-#     'mysqldump',
-#     '-h127.0.0.1',
-#     '-udebug',
-#     '-P33065',
-#     '-p',
-#     dev_db_name,
-#     '>',
-#     dump_file
-# ])
-
-
-# print(f'Dev DB dumped to {dump_file}')
-
-# run_local_mysql_file(dump_file)
-
-# print(f'local db loaded to {local_db_name} from {dump_file}')
-
-# print(f'Fixing up data (from {fix_file}')
-
-# run_local_mysql_file(fix_file)
-
-# print('Done!')
-
-#     mysqldump - uproduction - p$PW - P 3307 - h 127.0.0.1 - -add - drop - database \
-#     - -databases havenly_app > $DUMPFILE
-
-#     ~ / bin / fix - db.sh
-# fi

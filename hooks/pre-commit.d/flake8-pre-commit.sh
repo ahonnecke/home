@@ -1,7 +1,7 @@
 #!/bin/sh
 
-ACTION="autopep8"
-COMMAND="pipenv run autopep8 --in-place --aggressive --aggressive"
+ACTION="flake8"
+COMMAND="pipenv run flake8 --select=B902,E,F,W,C90"
 
 MERGE=$(git rev-parse -q --verify MERGE_HEAD)
 
@@ -17,6 +17,7 @@ if [[ ! $MERGE ]]; then
                 awk '$1 != "D" {print $2}' | \
                 grep -E '[.]py$' \
                 | grep -v migrations)
+
 
     echo "#### $ACTION ing the following files: ######"
     printf '%s\n' "${FILES[@]}"

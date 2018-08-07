@@ -1,16 +1,30 @@
 #!/bin/sh
 
+ACTION="mypy"
+COMMAND="pipenv run mypy --ignore-missing-imports --strict-optional"
+
 MERGE=$(git rev-parse -q --verify MERGE_HEAD)
 
-FILES=$(git diff --cached --name-status | \
-            grep -v node_modules | \
-            awk '$1 != "D" {print $2}' | \
-            grep -E '[.]py$' \
-            | grep -v migrations)
+if [[ $MERGE ]]; then
+    echo "This is a merge.... Skipping $ACTION"
+else
+    echo "This is not a merge.... $ACTION ing"
+fi
 
-if [ -n "$MERGE" ]; then
+if [[ ! $MERGE ]]; then
+    FILES=$(git diff --cached --name-status | \
+                grep -v node_modules | \
+                awk '$1 != "D" {print $2}' | \
+                grep -E '[.]py$' \
+                | grep -v migrations)
+
+
+    echo "#### $ACTION ing the following files: ######"
+    printf '%s\n' "${FILES[@]}"
+    echo "############################################"
+
     [ "$NOCHECK" != "" ] \
         || [ "$FILES" = "" ] \
-        || pipenv run mypy --ignore-missing-imports --strict-optional $FILES \
+        || $COMMAND $FILES \
         || exit 1
 fi
