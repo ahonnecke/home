@@ -1,0 +1,2 @@
+#!/bin/bash
+cd /Users/ahonnecke/Code/repos/web && .git/hooks/pre-commit
