@@ -1,29 +1,29 @@
 #!/bin/sh
 
-ACTION="autopep8"
-COMMAND="pipenv run autopep8 --in-place --aggressive --aggressive"
+# ACTION="autopep8"
+# COMMAND=""
 
-MERGE=$(git rev-parse -q --verify MERGE_HEAD)
+# MERGE=$(git rev-parse -q --verify MERGE_HEAD)
 
-if [[ $MERGE ]]; then
-    echo "This is a merge.... Skipping $ACTION"
-else
-    echo "This is not a merge.... $ACTION ing"
-fi
+# if [[ $MERGE ]]; then
+#     echo "This is a merge.... Skipping $ACTION"
+# else
+#     echo "This is not a merge.... $ACTION ing"
+# fi
 
-if [[ ! $MERGE ]]; then
-    FILES=$(git diff --cached --name-status | \
-                grep -v node_modules | \
-                awk '$1 != "D" {print $2}' | \
-                grep -E '[.]py$' \
-                | grep -v migrations)
+# if [[ ! $MERGE ]]; then
+#     FILES=$(git diff --cached --name-status | \
+#                 grep -v node_modules | \
+#                 awk '$1 != "D" {print $2}' | \
+#                 grep -E '[.]py$' \
+#                 | grep -v migrations)
 
-    echo "#### $ACTION ing the following files: ######"
-    printf '%s\n' "${FILES[@]}"
-    echo "############################################"
+#     echo "#### $ACTION ing the following files: ######"
+#     printf '%s\n' "${FILES[@]}"
+#     echo "############################################"
 
-    [ "$NOCHECK" != "" ] \
-        || [ "$FILES" = "" ] \
-        || $COMMAND $FILES \
-        || exit 1
-fi
+#     [ "$NOCHECK" != "" ] \
+#         || [ "$FILES" = "" ] \
+#         || $COMMAND $FILES \
+#         || exit 1
+# fi

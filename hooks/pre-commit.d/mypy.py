@@ -1,16 +1,20 @@
 #!/usr/local/bin/python3
 
 import os
-import subprocess
+import sys
+import argparse
+
+# from pylint import Run
+from subprocess import call, run, check_output
 
 from git import Repo
-import argparse
+from trepan.api import debug
 
 parser = argparse.ArgumentParser(description='Update a library')
 
 # Get the path from the shell, which is the only way to get the
 # location of the symlink src if it's called from a symlink
-real_path = subprocess.check_output(['pwd']).decode("utf-8").rstrip()
+real_path = check_output(['pwd']).decode("utf-8").rstrip()
 
 parser.add_argument('-r', '--repo', help='Git Repository to operate on',
                     default=real_path)
@@ -21,9 +25,8 @@ repo_path = args.repo
 web_repo = Repo(repo_path)
 git = web_repo.git
 
-action = "flake8"
-command = ['pipenv', 'run', 'flake8', '--select=B902,E,F,W,C90']
-
+action="mypy"
+command=['pipenv', 'run', 'mypy', '--ignore-missing-imports', '--strict-optional']
 
 try:
     git.rev_parse('-q', '--verify', 'MERGE_HEAD')
@@ -64,7 +67,7 @@ for filepath in files:
     print(filepath)
     command.append(filepath)
     # print(' '.join(str(x) for x in command))
-    out = subprocess.run(command, capture_output=True)
+    out = run(command, capture_output=True)
     if out.returncode != 0:
         failures[filepath] = out
     command.pop()
@@ -73,7 +76,6 @@ print("============================================")
 if len(failures):
     print("############## FAILURES ####################")
     for filepath, failure in failures.items():
-        # print(f'###### {filepath} #########')
         print(failure.stdout.decode("utf-8").rstrip())
 
     print("############################################")
