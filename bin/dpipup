@@ -76,7 +76,7 @@ print(f'Latest {lib} version is {latest_version}')
 call(['git', 'fetch', '--all'])
 git.fetch('--all')
 remote_branches = git.branch('-r')
-g
+
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
 
 if current_version != latest_version:

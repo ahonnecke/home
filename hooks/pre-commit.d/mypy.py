@@ -4,6 +4,8 @@ import os
 import sys
 import argparse
 
+exit(0)
+
 # from pylint import Run
 from subprocess import call, run, check_output
 
@@ -25,9 +27,10 @@ repo_path = args.repo
 web_repo = Repo(repo_path)
 git = web_repo.git
 
-action="mypy"
-command=['pipenv', 'run', 'mypy', '--ignore-missing-imports', '--strict-optional']
+action = "mypy"
+command = ['pipenv', 'run', 'mypy', '--ignore-missing-imports', '--strict-optional']
 
+is_merge: bool
 try:
     git.rev_parse('-q', '--verify', 'MERGE_HEAD')
     is_merge = True
@@ -36,6 +39,7 @@ except Exception as e:
 
 if is_merge:
     print(f'This is a merge.... Skipping {action}')
+    exit(0)
 else:
     print(f'This is not a merge.... Performing {action}')
 
@@ -45,9 +49,6 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-
-if is_merge:
-    print("This is a merge, let's not do anything, that sounds tiring")
 
 modified = git.diff('--cached', '--name-only', '--diff-filter=M').split()
 added = git.diff('--cached', '--name-only', '--diff-filter=A').split()

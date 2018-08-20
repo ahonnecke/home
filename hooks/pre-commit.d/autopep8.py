@@ -48,6 +48,7 @@ def chunks(l, n):
 
 if is_merge:
     print("This is a merge, let's not do anything, that sounds tiring")
+    exit(0)
 
 modified = git.diff('--cached', '--name-only', '--diff-filter=M').split()
 added = git.diff('--cached', '--name-only', '--diff-filter=A').split()
