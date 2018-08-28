@@ -6,7 +6,7 @@ import argparse
 import sys
 
 ECR_ACCOUNT = "712182686879"
-ROLE_ARN = ""
+ROLE_ARN = "arn:aws:iam::974666675768:role/dev-ashton-honnecke-role"
 
 if not ROLE_ARN:
     print('A Role ARN is requried')

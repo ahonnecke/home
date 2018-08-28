@@ -5,7 +5,7 @@ import sys
 import argparse
 
 # from pylint import Run
-from subprocess import call, run, check_output
+from subprocess import call, run, check_output, PIPE
 
 from git import Repo
 from trepan.api import debug
@@ -64,7 +64,7 @@ print(f'==== {action} ing the following files: ======')
 for filepath in files:
     print(filepath)
     command.append(filepath)
-    out = run(command, capture_output=True)
+    out = run(command, stdout=PIPE)
     if out.returncode != 0:
         failures[filepath] = out
     command.pop()
