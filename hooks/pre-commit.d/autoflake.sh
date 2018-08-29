@@ -12,15 +12,10 @@ else
 fi
 
 if [[ ! $MERGE ]]; then
-    FILES=$(git diff --cached --name-status | \
+    FILES=$(git diff --cached --diff-filter=MA --name-only | \
                 grep -v node_modules | \
-                awk '$1 != "D" {print $2}' | \
                 grep -E '[.]py$' \
                 | grep -v migrations)
-
-    echo "#### $ACTION ing the following files: ######"
-    printf '%s\n' "${FILES[@]}"
-    echo "############################################"
 
     [ "$NOCHECK" != "" ] \
         || [ "$FILES" = "" ] \

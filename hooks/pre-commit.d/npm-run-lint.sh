@@ -1,5 +1,10 @@
 #!/bin/sh
 
-cd client
-FILES=`git diff --cached --name-status | grep -v package.json | grep -v node_modules | awk '$1 != "D" {print $2}' | grep -E '[.]js$'`
+
+FILES=$(
+    git diff --cached --name-only --diff-filter=MA \
+        | grep -v node_modules \
+        | grep -E '[.]js$'
+     )
+
 [ "$NOCHECK" != "" ] || [ "$FILES" = "" ] || npm run fix $FILES || exit 1

@@ -63,16 +63,14 @@ files = [x for x in files if x[-3:] == '.py']
 
 failures = {}
 
-print(f'==== {action} ing the following files: ======')
 for filepath in files:
-    print(filepath)
+    # print(filepath)
     command.append(filepath)
     # print(' '.join(str(x) for x in command))
     out = run(command, capture_output=True)
     if out.returncode != 0:
         failures[filepath] = out
     command.pop()
-print("============================================")
 
 if len(failures):
     print("############## FAILURES ####################")

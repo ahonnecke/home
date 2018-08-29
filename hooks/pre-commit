@@ -135,7 +135,7 @@ def main():
         stderr = stderr_raw.decode('utf-8').strip()
 
         if stdout:
-            log.info(stdout)
+            log.info(f'  {stdout}')
         if stderr:
             log.error(stderr)
 
