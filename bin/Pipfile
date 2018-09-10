@@ -7,11 +7,13 @@ name = "pypi"
 
 [packages]
 
-"flake8" = "*"
+flake8 = "*"
 pygithub = "*"
 diceware = "*"
 requests = "*"
 gitpython = "*"
+aws = "*"
+trepan3k = "*"
 
 
 [dev-packages]

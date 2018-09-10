@@ -1,10 +1,10 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3.6
 
 import os
 from subprocess import PIPE, run
 
 remote_client_keys = run(
-    ['aws', 's3', '--region', 'us-east-1', '--profile', 'web', 'ls', 's3://265040097070-dev-client-keys'],
+    ['/usr/local/bin/aws', 's3', '--region', 'us-east-1', '--profile', 'web', 'ls', 's3://265040097070-dev-client-keys'],
     stdout=PIPE
 ).stdout.decode('utf-8').split("\n")
 

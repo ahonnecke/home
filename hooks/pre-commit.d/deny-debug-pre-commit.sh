@@ -18,12 +18,19 @@ else
 fi
 
 
-FAILS1=$(echo $FILES | xargs grep DONOTCOMMIT)
+FAILS0=$(echo $FILES | xargs grep DONOTCOMMIT)
+FAILS1=$(echo $FILES | xargs grep NOCOMMIT)
 FAILS2=$(echo $FILES | xargs grep -e '^\+.*debug().*$')
 FAILS3=$(echo $FILES | xargs grep -e '^\+.*show_trace.*$')
 
-if [[ $FAILS1 ]] ; then
+if [[ $FAILS0 ]] ; then
     echo "You have left DONOTCOMMIT in the following files, "
+    echo "You can't commit until they have been removed."
+    echo $FAILS0
+    exit 1
+fi
+if [[ $FAILS1 ]] ; then
+    echo "You have left NOCOMMIT in the following files, "
     echo "You can't commit until they have been removed."
     echo $FAILS1
     exit 1

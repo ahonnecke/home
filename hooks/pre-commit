@@ -42,6 +42,7 @@ For example:
 Additionally, colored logging is supported if the package colorlog is
 installed.
 """
+# exit(0)
 
 from sys import argv
 from logging import getLogger
