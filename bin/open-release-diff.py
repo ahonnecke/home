@@ -2,15 +2,19 @@
 
 import json
 
-import git
 import requests
 import subprocess
 
-hurl = 'https://app.digitalassetsdata.com/healthcheck/'
+prod_hurl = 'https://app.digitalassetsdata.com/healthcheck/'
+dev_hurl = 'https://dev.da-data.net/healthcheck/'
 
-response = requests.get(hurl)
+response = requests.get(prod_hurl)
+json_data = json.loads(response.text)
+prod_rev = json_data['revision']
+
+response = requests.get(dev_hurl)
 json_data = json.loads(response.text)
 dev_rev = json_data['revision']
-diff_url = f'https://github.com/digital-assets-data/web/compare/{dev_rev}...HEAD'
+diff_url = f'https://github.com/digital-assets-data/web/compare/{prod_rev}...{dev_rev}'
 
 subprocess.run(['open', diff_url])
