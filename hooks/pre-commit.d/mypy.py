@@ -1,16 +1,10 @@
 #!/usr/local/bin/python3
 
-import os
-import sys
 import argparse
-
-exit(0)
-
 # from pylint import Run
-from subprocess import call, run, check_output
+from subprocess import check_output, run
 
 from git import Repo
-from trepan.api import debug
 
 parser = argparse.ArgumentParser(description='Update a library')
 
@@ -57,7 +51,7 @@ files = added + modified
 ignores = ['node_modules', 'migrations']
 
 for pattern in ignores:
-    files = [x for x in files if not pattern in x]
+    files = [x for x in files if pattern not in x]
 
 files = [x for x in files if x[-3:] == '.py']
 

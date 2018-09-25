@@ -1,6 +1,6 @@
 #!/bin/bash
 
-    PORT=33067
+PORT=33067
 nc -z localhost $PORT > /dev/null
 
 if [ $? -ne 0 ]; then
