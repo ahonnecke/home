@@ -4,6 +4,7 @@ MERGE=$(git rev-parse -q --verify MERGE_HEAD)
 
 if [[ $MERGE ]]; then
     echo "This is a merge.... Skipping npm lint"
+    exit
 else
     echo "This is not a merge.... npm linting"
 fi
