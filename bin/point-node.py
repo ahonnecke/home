@@ -3,6 +3,8 @@
 import argparse
 import os
 
+PATH = '/Users/ahonnecke/Code/repos/websocket-listeners'
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='Rename symlink to use different config')
@@ -17,9 +19,9 @@ def get_args():
 
 
 def repoint(env):
-    path = '/Users/ahonnecke/Code/repos/node-data-sync'
-    src = f'{path}/ormconfig.json'
-    dest = f'{path}/ormconfig.{env}.json'
+
+    src = f'{PATH}/ormconfig.json'
+    dest = f'{PATH}/ormconfig.{env}.json'
     print(f'###############################################################')
     print(f'{src}')
     print(f'     Now points to ------------>    ')
