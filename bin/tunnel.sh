@@ -20,5 +20,16 @@ if [ $? -ne 0 ]; then
         $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
         $BASTION_USER@$BASTION_HOST&
 else
+
+    ps aux | grep ssh | grep $LOCAL_PORT > /dev/null
+
+    if [ $? -ne 0 ]; then
+        echo "$LOCAL_PORT not an SSH tunnel..."
+        echo "You probably need to try using a different port, this did not work"
+        echo "Or kill whatever is on that port `netstat -anv | grep -i listen | grep $LOCAL_PORT`"
+        exit 1
+    fi
+
     echo "$LABEL tunnel to $DEST_HOST already open.  You're good to go."
+    echo "localhost:$LOCAL_PORT >>>>> $DEST_HOST:$DEST_PORT (through $BASTION_USER@$BASTION_HOST)"
 fi
