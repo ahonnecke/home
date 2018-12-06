@@ -7,7 +7,7 @@ LOCAL_PORT=$2
 DEST_HOST=$3
 DEST_PORT=$4
 
-BASTION_HOST="dev-bastion"
+BASTION_HOST=$5
 BASTION_USER="ubuntu"
 KEY="~/.ssh/manual-dev-web-bastion.pem"
 

@@ -1,14 +1,9 @@
 #!/bin/bash
 
-PORT=33067
-nc -z localhost $PORT > /dev/null
+LOCAL_PORT=33067
+LABEL="Prod database (MySQL web)"
+DEST_HOST="prod-www-mysql.cyzmwokjasvx.us-east-1.rds.amazonaws.com"
+DEST_PORT=3306
+BASION_HOST="prod-bastion"
 
-if [ $? -ne 0 ]; then
-    echo "Tunnel to the prod db not open... Opening now..."
-
-    ssh -i ~/.ssh/manual-prod-web-bastion.pem -N -L \
-        $PORT:prod-www-mysql.cyzmwokjasvx.us-east-1.rds.amazonaws.com:3306 \
-        ubuntu@prod-bastion&
-else
-    echo "Tunnel was already open.  You're good to go."
-fi
+~/bin/tunnel.sh "$LABEL" $LOCAL_PORT $DEST_HOST $DEST_PORT $BASION_HOST
