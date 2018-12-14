@@ -1,14 +1,14 @@
 #!/usr/local/bin/python3
 
+import argparse
 import os
 import sys
-import argparse
-
 # from pylint import Run
-from subprocess import call, run, check_output, PIPE
+from subprocess import PIPE, call, check_output, run
 
 from git import Repo
-from trepan.api import debug
+
+# TODO: figure out how to exclude the web branch, it never fucking passes this
 
 parser = argparse.ArgumentParser(description='Update a library')
 
