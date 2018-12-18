@@ -60,6 +60,8 @@ files = [x for x in files if x[-3:] == '.py']
 
 failures = {}
 
+os.chdir(real_path)
+
 for filepath in files:
     print(filepath)
     command.append(filepath)
