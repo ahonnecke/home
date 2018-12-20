@@ -15,6 +15,6 @@ FILES=$(
         | grep -E '[.]js$'
      )
 
-cd client >> /dev/null
+cd client 2> /dev/null
 
 [ "$NOCHECK" != "" ] || [ "$FILES" = "" ] || npm run fix $FILES || exit 1
