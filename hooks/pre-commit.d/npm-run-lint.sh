@@ -9,13 +9,12 @@ else
     echo "This is not a merge.... npm linting"
 fi
 
-
 FILES=$(
     git diff --cached --name-only --diff-filter=MA \
         | grep -v node_modules \
         | grep -E '[.]js$'
      )
 
-cd client
+cd client >> /dev/null
 
 [ "$NOCHECK" != "" ] || [ "$FILES" = "" ] || npm run fix $FILES || exit 1

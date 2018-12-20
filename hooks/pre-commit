@@ -44,11 +44,23 @@ installed.
 """
 # exit(0)
 
-from sys import argv
+import time
 from logging import getLogger
-from subprocess import Popen, PIPE
-from os import access, listdir, X_OK
-from os.path import isfile, isdir, abspath, normpath, dirname, join, basename
+from os import X_OK, access, listdir
+from os.path import abspath, basename, dirname, isdir, isfile, join, normpath
+from subprocess import PIPE, Popen
+from sys import argv
+
+
+class Timer:
+    def __enter__(self):
+        self.start = time.clock()
+        return self
+
+    def __exit__(self, *args):
+        self.end = time.clock()
+        self.interval = self.end - self.start
+        print('TTH: %.03f sec.' % self.interval)
 
 
 GIT_HOOKS = [
@@ -126,24 +138,26 @@ def main():
 
     # Execute hooks
     for h in hooks:
-        hook_id = '{}.d/{}'.format(hook_type, basename(h))
-        log.info('Running hook {}...'.format(hook_id))
+        with Timer() as t:
 
-        proc = Popen([h] + argv[1:], stdout=PIPE, stderr=PIPE)
-        stdout_raw, stderr_raw = proc.communicate()
+            hook_id = '{}.d/{}'.format(hook_type, basename(h))
+            log.info('Running hook {}...'.format(hook_id))
 
-        stdout = stdout_raw.decode('utf-8').strip()
-        stderr = stderr_raw.decode('utf-8').strip()
+            proc = Popen([h] + argv[1:], stdout=PIPE, stderr=PIPE)
+            stdout_raw, stderr_raw = proc.communicate()
 
-        if stdout:
-            log.info(f'  {stdout}')
-        if stderr:
-            log.error(stderr)
+            stdout = stdout_raw.decode('utf-8').strip()
+            stderr = stderr_raw.decode('utf-8').strip()
 
-        # Log errors if a hook failed
-        if proc.returncode != 0:
-            log.error('Hook {} failed. Aborting...'.format(hook_id))
-            exit(proc.returncode)
+            if stdout:
+                log.info(f'  {stdout}')
+            if stderr:
+                log.error(stderr)
+
+            # Log errors if a hook failed
+            if proc.returncode != 0:
+                log.error('Hook {} failed. Aborting...'.format(hook_id))
+                exit(proc.returncode)
 
 
 if __name__ == '__main__':
