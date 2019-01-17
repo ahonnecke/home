@@ -3,7 +3,7 @@
 DIR="/Users/ahonnecke/Code/repos/clean-data-ingestion/"
 FROM="master"
 TO="dev"
-REMOTE="origin"
+REMOTE="upstream"
 
 URL="https://github.com/digital-assets-data/data-ingestion/compare/$TO...$FROM"
 open $URL;
@@ -13,8 +13,7 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
     cd $DIR
 
-    git reset --hard $REMOTE/$TO --
-    git checkout $FROM
+    git checkout $to
     git reset --hard $REMOTE/$FROM --
     git push -v $REMOTE $FROM\:refs/heads/$TO
 else

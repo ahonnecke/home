@@ -1,10 +1,10 @@
 #!/usr/local/bin/python3
 
+import argparse
 import os
 import subprocess
 
 from git import Repo
-import argparse
 
 parser = argparse.ArgumentParser(description='Update a library')
 
@@ -19,10 +19,16 @@ args = parser.parse_args()
 repo_path = args.repo
 
 web_repo = Repo(repo_path)
+
 git = web_repo.git
 
 action = "flake8"
-command = ['pipenv', 'run', 'flake8', '--select=B902,E,F,W,C90']
+config_file = f'{repo_path}/setup.cfg'
+
+if os.path.exists(config_file):
+    command = ['pipenv', 'run', 'flake8', f'--config={config_file}']
+else:
+    exit(0)
 
 
 try:
