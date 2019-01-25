@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-[[ "$TRACE" ]] && set -x
-set -eu -o pipefail
 
 #
 # This pre-commit hook checks that you havn't left and DONOTCOMMIT tokens in
@@ -20,10 +18,7 @@ else
     against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 fi
 
-FILES=$(git diff --cached --diff-filter=MA --name-only | \
-            grep -v node_modules | \
-            grep -E '[.]py$' \
-            | grep -v migrations)
+FILES=$(git diff --cached --diff-filter=MA --name-only | grep -v deny-debug-pre-commit)
 
 FAILS0=$(echo $FILES | xargs grep DONOTCOMMIT)
 FAILS1=$(echo $FILES | xargs grep NOCOMMIT)
@@ -48,10 +43,11 @@ if [[ $FAILS2 ]] ; then
     echo $FAILS2
     exit 1
 fi
-
 if [[ $FAILS3 ]] ; then
     echo "You have left show_trace in the following files,"
     echo "You can't commit until they have been removed."
     echo $FAILS3
     exit 1
 fi
+exit 0
+
