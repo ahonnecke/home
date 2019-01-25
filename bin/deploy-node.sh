@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 cd ~/Code/repos/node-data-sync/docker
 docker build -t dev-subscriber .

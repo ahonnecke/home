@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 DIR="/Users/ahonnecke/Code/client"
 cd $DIR;

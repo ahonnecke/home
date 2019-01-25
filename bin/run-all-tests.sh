@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 unset CLIENT_KEY
 unset PLAID_CLIENT_ID

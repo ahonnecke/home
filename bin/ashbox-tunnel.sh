@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 PORT=63000
 nc -z localhost $PORT > /dev/null

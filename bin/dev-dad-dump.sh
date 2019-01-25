@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 DUMPFILE="/tmp/dad-dev.sql"
 FIXFILE="/Users/ahonnecke/sql/fix-dad-data.sql"

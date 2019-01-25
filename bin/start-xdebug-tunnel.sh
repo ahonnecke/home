@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 ps aux | grep ssh | grep 9000 | grep vagrant > /dev/null
 

@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 DIR="/Users/ahonnecke/Code/API"
 
@@ -27,7 +30,6 @@ then
     git reset --hard upstream/staging
     git tag $TAG
     git push upstream $TAG
-
 
     read -r -p "Do you want me to notify development? [y/N] " response
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]

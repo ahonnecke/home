@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ ! -f ./package.json ]; then
+    echo "no package.json not npm linting"
+    exit 0
+fi
+
 MERGE=$(git rev-parse -q --verify MERGE_HEAD)
 
 if [[ $MERGE ]]; then

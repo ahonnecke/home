@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 
 # Lints a specified file, using either [Rhino][r] or [Node.js][n] as
 # an engine.  You'll need to ensure that one or the other is

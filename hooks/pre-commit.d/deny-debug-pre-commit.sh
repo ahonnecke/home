@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
 #
 # This pre-commit hook checks that you havn't left and DONOTCOMMIT tokens in
 # your code when you go to commit.
@@ -17,6 +20,10 @@ else
     against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 fi
 
+FILES=$(git diff --cached --diff-filter=MA --name-only | \
+            grep -v node_modules | \
+            grep -E '[.]py$' \
+            | grep -v migrations)
 
 FAILS0=$(echo $FILES | xargs grep DONOTCOMMIT)
 FAILS1=$(echo $FILES | xargs grep NOCOMMIT)

@@ -1,50 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
 
-DIR="/Users/ahonnecke/Code/APP"
 
+DIR="/Users/ahonnecke/Code/repos/data-ingestion/"
 cd $DIR
-
-TAG=`git describe --abbrev=0 --tags`
-URL="https://github.com/havenly/havenly-2.0/compare/$TAG...staging"
+FROM='master'
+TO='dev'
+URL="https://github.com/digital-assets-data/data-ingestion/compare/$FROM...$TO"
 
 open $URL;
 
-read -r -p "Pull the trigger? [y/N] " response
+read -r -p "Deploy from $FROM to $TO? [y/N] " response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    ~/bin/ashbot.sh #sets the token
-
-    DATE=`date +"%Y%m%d%H%M"`
-    TAG="release-$DATE"
-
-    echo "Deploying $TAG to production"
-
-    cd $DIR
-    git fetch --all
-    git checkout staging
-    git reset --hard upstream/staging
-    git tag $TAG
-    git push upstream $TAG
-
-    read -r -p "Do you want me to notify development? [y/N] " response
-    if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
-    then
-        slackcli --username="ashbot" \
-                 -h development \
-                 -m "Deploying $TAG to production app  @channel" \
-                 -i="http://pixelstub.com/images/robot_coral_small.png"
-    fi
-
-    read -r -p "Do you want me to notify general? [y/N] " response
-    if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
-    then
-        slackcli --username="ashbot" \
-                 -h general \
-                 -m "Deploying $TAG to production app @channel" \
-                 -i="http://pixelstub.com/images/robot_coral_small.png"
-    fi
-
-    open https://rpm.newrelic.com/accounts/959945/applications/8055526
+    git fetch -all
+    echo "git push upstream $FROM:$TO"
 else
     echo "Cancelled deploy"
 fi
