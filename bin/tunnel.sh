@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-[[ "$TRACE" ]] && set -x
-set -eu -o pipefail
-
-
 LABEL=$1
 echo "$LABEL"
 LOCAL_PORT=$2
@@ -23,6 +19,7 @@ if [ $? -ne 0 ]; then
         $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
         $BASTION_USER@$BASTION_HOST&
 else
+    echo "Local port $LOCAL_PORT seems to be open...."
 
     ps aux | grep ssh | grep $LOCAL_PORT > /dev/null
 
