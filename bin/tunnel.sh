@@ -8,16 +8,38 @@ DEST_PORT=$4
 
 BASTION_HOST=$5
 BASTION_USER="ubuntu"
-KEY="~/.ssh/manual-dev-web-bastion.pem"
+
+if [ "$BASTION_HOST" = "dev-bastion" ]; then
+    KEY="~/.ssh/manual-dev-web-bastion.pem"
+fi
+
+if [ "$BASTION_HOST" = "prod-bastion" ]; then
+    KEY="~/.ssh/manual-prod-web-bastion.pem"
+fi
 
 nc -z localhost $LOCAL_PORT > /dev/null
 if [ $? -ne 0 ]; then
     echo "$LABEL tunnel to $DEST_HOST not open...."
     echo "Opening localhost:$LOCAL_PORT >>>>> $DEST_HOST:$DEST_PORT (through $BASTION_USER@$BASTION_HOST)"
 
-    ssh -i $KEY -N -L \
-        $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
-        $BASTION_USER@$BASTION_HOST&
+
+    which autossh
+    if [ $? -eq 0 ]; then
+        ssh-add -A
+
+        echo "found autossh"
+        autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+                -L $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
+                $BASTION_USER@$BASTION_HOST
+    else
+        echo "===================== Did not find autossh ==========================="
+        echo "If you are at galvanize platte "
+        echo "they're going to kill your poor little connections if they get stale"
+        echo "======================= Using ssh =============================="
+        ssh -i $KEY -N -L \
+            $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
+            $BASTION_USER@$BASTION_HOST&
+    fi
 else
     echo "Local port $LOCAL_PORT seems to be open...."
 
