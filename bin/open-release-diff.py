@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import json
+import subprocess
 
 import requests
-import subprocess
 
 prod_hurl = 'https://app.digitalassetsdata.com/healthcheck/'
 dev_hurl = 'https://dev.da-data.net/healthcheck/'
