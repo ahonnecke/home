@@ -9,12 +9,19 @@ DEST_PORT=$4
 BASTION_HOST=$5
 BASTION_USER="ubuntu"
 
-if [ "$BASTION_HOST" = "dev-bastion" ]; then
-    KEY="~/.ssh/manual-dev-web-bastion.pem"
+if [ "$BASTION_HOST" = "dev-web-bastion" ]; then
+    KEY="~/.ssh/dev-web.pem"
+    BASTION_HOST="dev-web-bastion"
 fi
 
-if [ "$BASTION_HOST" = "prod-bastion" ]; then
-    KEY="~/.ssh/manual-prod-web-bastion.pem"
+if [ "$BASTION_HOST" = "dev" ]; then
+    KEY="~/.ssh/dev-web.pem"
+    BASTION_HOST="dev-web-bastion"
+fi
+
+if [ "$BASTION_HOST" = "prod-web-bastion" ]; then
+    KEY="~/.ssh/prod-web.pem"
+    BASTION_HOST="prod-web-bastion"
 fi
 
 
@@ -23,9 +30,8 @@ if [ $? -ne 0 ]; then
     echo "$LABEL tunnel to $DEST_HOST not open...."
     echo "Opening localhost:$LOCAL_PORT >>>>> $DEST_HOST:$DEST_PORT (through $BASTION_USER@$BASTION_HOST)"
 
-    which autossh
+    which autosshx
     if [ $? -eq 0 ]; then
-#        ssh-add -A
 
         echo "found autossh"
         autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
@@ -40,6 +46,8 @@ if [ $? -ne 0 ]; then
             $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
             $BASTION_USER@$BASTION_HOST&
     fi
+
+    sleep 1
 else
     echo "Local port $LOCAL_PORT seems to be open...."
 
