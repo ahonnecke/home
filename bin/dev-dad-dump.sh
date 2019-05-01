@@ -23,7 +23,7 @@ fi
 
 if [ ! -f $DUMPFILE ]; then
 
-    /Users/ahonnecke/bin/dev-db-tunnel.sh
+    dev-db-tunnel.sh
 
     echo "Confirmed Tunnel"
     echo "Dumping from $DEV_DB_NAME to $DUMPFILE"
@@ -31,19 +31,20 @@ if [ ! -f $DUMPFILE ]; then
     # It takes just a bit for the tunnel to set up.
     sleep 1
 
-    mysqldump --add-drop-database -h127.0.0.1 -P33065  $DEV_DB_NAME > $DUMPFILE
+    #mysqldump --no-data --add-drop-database -udebug -h127.0.0.1 -P33065 -p $DEV_DB_NAME > $SCHEMA
+    mysqldump --add-drop-database -udebug -h127.0.0.1 -P33065 -p $DEV_DB_NAME > $DUMPFILE
 fi
 
-ls -l $DUMPFILE
-echo "db dumped to $DUMPFILE"
+# ls -l $DUMPFILE
+# echo "db dumped to $DUMPFILE"
 
-mysql -uroot -proot -e "DROP DATABASE IF EXISTS $LOCAL_DB_NAME"
-mysql -uroot -proot -e "CREATE DATABASE $LOCAL_DB_NAME"
+# mysql -uroot -proot -e "DROP DATABASE IF EXISTS $LOCAL_DB_NAME"
+# mysql -uroot -proot -e "CREATE DATABASE $LOCAL_DB_NAME"
 
-echo "Done creating database"
+# echo "Done creating database"
 
-mysql -uroot -proot $LOCAL_DB_NAME < $DUMPFILE
+# mysql -uroot -proot $LOCAL_DB_NAME < $DUMPFILE
 
-echo "Done loading dump"
+# echo "Done loading dump"
 
-mysql -uroot -proot $LOCAL_DB_NAME < $FIXFILE
+# mysql -uroot -proot $LOCAL_DB_NAME < $FIXFILE
