@@ -38,7 +38,7 @@ if [ $? -ne 0 ]; then
     which autossh
     if [ $? -eq 0 ]; then
 
-        echo "found autossh"
+        echo "Found autossh, you're going to get shit done!"
         autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
                 -f \
                 -i $KEY -N -L \
@@ -51,7 +51,8 @@ if [ $? -ne 0 ]; then
         echo "======================= Using ssh =============================="
         ssh -i $KEY -N -L \
             $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
-            $BASTION_USER@$BASTION_HOST&
+            $BASTION_USER@$BASTION_HOST \
+            &
     fi
 
     sleep 1
