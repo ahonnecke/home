@@ -35,13 +35,15 @@ if [ $? -ne 0 ]; then
     echo "$LABEL tunnel to $DEST_HOST not open...."
     echo "Opening localhost:$LOCAL_PORT >>>>> $DEST_HOST:$DEST_PORT (through $BASTION_USER@$BASTION_HOST)"
 
-    which autosshx
+    which autossh
     if [ $? -eq 0 ]; then
 
         echo "found autossh"
         autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
-                -L $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
-                $BASTION_USER@$BASTION_HOST &
+                -f \
+                -i $KEY -N -L \
+                $LOCAL_PORT:$DEST_HOST:$DEST_PORT \
+                $BASTION_USER@$BASTION_HOST
     else
         echo "===================== Did not find autossh ==========================="
         echo "If you are at galvanize platte "
