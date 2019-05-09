@@ -29,6 +29,11 @@ if [ "$BASTION_HOST" = "prod" ]; then
     BASTION_HOST="prod-web-bastion"
 fi
 
+if [ "$BASTION_HOST" = "prod-node" ]; then
+    KEY="~/.ssh/prod-nodes.pem"
+    BASTION_HOST="prod-nodes-bastion"
+fi
+
 
 netstat -tuplen | grep 127.0.0.1 | grep $LOCAL_PORT
 if [ $? -ne 0 ]; then
