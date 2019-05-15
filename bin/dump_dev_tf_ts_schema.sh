@@ -27,9 +27,9 @@ LIMIT=10001
 
 if (( LIMIT == 0 )); then
     echo "Dumping full table"
-    # pg_dump -t $TABLE\
-    #         --data-only \
-    #         -h localhost -p $LOCAL_PORT -U dev-app postgres > ./$TABLE.sql
+    pg_dump -t $TABLE\
+            --data-only \
+            -h localhost -p $LOCAL_PORT -U dev-app postgres > ./$TABLE.sql
 else
     echo "Dumping partial table ($LIMIT rows)"
     psql -c "COPY (SELECT * FROM $TABLE LIMIT $LIMIT) TO STDOUT;" \
