@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    echo "Table must be provided";
+    exit 8
+else
+    TABLE=$1
+    echo "Dumping table $TABLE with limit $LIMIT";
+fi
+
 [[ "$TRACE" ]] && set -x
 set -eu -o pipefail
 
@@ -12,28 +21,28 @@ BASTION_HOST="dev"
 
 sleep 1
 
-    # -t blockchain_aggregate_block_day \
-    # -t blockchain_aggregate_block_hour \
-    # -t blockchain_aggregate_transaction_day \
-    # -t blockchain_aggregate_transaction_hour \
-    # -t trade_aggregate_all_usd_day \
-    # -t trade_aggregate_all_usd_hour \
-    # -t trade_aggregate_exchange_usd_hour \
-    # -t trade_aggregate_exchange_usd_day \
-    # -t trade_aggregate_exchange_usd_day \
-
-TABLE='trade_raw_tick'
 LIMIT=10001
+USER='dev-app'
+HOST='localhost'
+DBNAME='postgres'
 
 if (( LIMIT == 0 )); then
     echo "Dumping full table"
     pg_dump -t $TABLE\
             --data-only \
-            -h localhost -p $LOCAL_PORT -U dev-app postgres > ./$TABLE.sql
+            -h $HOST -p $LOCAL_PORT -U $USER $DBNAME > ./$TABLE.sql
 else
+    echo "Dumping table schema"
+    pg_dump -t $TABLE \
+            -s \
+            -h $HOST -p $LOCAL_PORT -U $USER $DBNAME > ./$TABLE-schema.sql
+
+    #TODO, allow user to override this
+    QUERY="SELECT * FROM $TABLE LIMIT $LIMIT"
+
     echo "Dumping partial table ($LIMIT rows)"
-    psql -c "COPY (SELECT * FROM $TABLE LIMIT $LIMIT) TO STDOUT;" \
-         -h localhost \
+    psql -c "COPY ($QUERY) TO STDOUT;" \
+         -h $HOST \
          -p $LOCAL_PORT \
-         -U dev-app postgres > ./$TABLE.sql
+         -U $USER $DBNAME > ./$TABLE.tsv
 fi
