@@ -14,6 +14,11 @@ if [ "$BASTION_HOST" = "dev-web-bastion" ]; then
     BASTION_HOST="dev-web-bastion"
 fi
 
+if [ "$BASTION_HOST" = "dev-nodes-bastion" ]; then
+    KEY="~/.ssh/dev-nodes.pem"
+    BASTION_HOST="dev-nodes-bastion"
+fi
+
 if [ "$BASTION_HOST" = "dev" ]; then
     KEY="~/.ssh/dev-web.pem"
     BASTION_HOST="dev-web-bastion"
@@ -40,7 +45,7 @@ if [ $? -ne 0 ]; then
     echo "$LABEL tunnel to $DEST_HOST not open...."
     echo "Opening localhost:$LOCAL_PORT >>>>> $DEST_HOST:$DEST_PORT (through $BASTION_USER@$BASTION_HOST)"
 
-    which autossh
+    which autosshx
     if [ $? -eq 0 ]; then
 
         echo "Found autossh, you're going to get shit done!"

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import subprocess
 import time
@@ -20,7 +22,6 @@ if __name__ == "__main__":
     cursor = con.cursor()
     query = input('Raw Query: ')
 
-
     start = time.time()
     row = cursor.execute(f"EXPLAIN {query}")
     end = time.time()
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     results = [x[0] for x in cursor.fetchall()]
     plan = "\n".join(results)
 
-    #print(plan)
+    # print(plan)
 
     url = 'https://explain.depesz.com/'
     r = requests.post(url, data={'plan': plan})
