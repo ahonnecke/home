@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
+ROLE=${1}
+ENV=${2:-dev}
+
+rm ${HOME}/.ssh/config
+ln -s ${HOME}/.ssh/${ENV}_${ROLE}.conf ${HOME}/.ssh/config
