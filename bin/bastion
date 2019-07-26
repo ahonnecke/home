@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
-import os
 
 
 class PathUtils:
@@ -18,7 +17,7 @@ class PathUtils:
 
     @property
     def ssh_configs_dir(self):
-        return os.path.join(self.home, "ssh_configs")
+        return os.path.join(self.home, "src", "home", "ssh_configs")
 
     @property
     def ssh_config_list(self):
