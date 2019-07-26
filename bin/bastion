@@ -1,9 +1,64 @@
-#!/usr/bin/env bash
-[[ "$TRACE" ]] && set -x
-set -eu -o pipefail
+#!/usr/bin/env python3
 
-ROLE=${1}
-ENV=${2:-dev}
+import os
+from pathlib import Path
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
+import os
 
-rm ${HOME}/.ssh/config
-ln -s ${HOME}/.ssh/${ENV}_${ROLE}.conf ${HOME}/.ssh/config
+
+class PathUtils:
+    @property
+    def home(self):
+        return str(Path.home())
+
+    @property
+    def ssh_config_slug(self):
+        return os.path.join(self.home, ".ssh", "config")
+
+    @property
+    def ssh_configs_dir(self):
+        return os.path.join(self.home, "ssh_configs")
+
+    @property
+    def ssh_config_list(self):
+        results = []
+        for file in os.listdir(self.ssh_configs_dir):
+            if file.endswith(".conf"):
+                results.append(file)
+        return results
+
+    @property
+    def bastion_hosts_list(self):
+        return [x.replace(".conf", "-bastion") for x in self.ssh_config_list]
+
+    def unlink(self, path):
+        if os.path.islink(path):
+            os.unlink(path)
+
+
+class TerminalWriter:
+    def print_header(self, message):
+        print(f"###############################################################")
+        print(f"{message}")
+        print(f"###############################################################")
+
+
+class Bastion(PathUtils, TerminalWriter):
+    def main(self):
+        bastion_completer = WordCompleter(b.bastion_hosts_list)
+        conf = prompt("Choose a bastion host: ", completer=bastion_completer)
+
+        host = conf.replace("-bastion", ".conf")
+
+        self.unlink(self.ssh_config_slug)
+
+        dest = os.path.join(self.ssh_configs_dir, host)
+
+        self.print_header(f"{dest} -> {self.ssh_config_slug}")
+        os.symlink(dest, self.ssh_config_slug)
+
+
+if __name__ == "__main__":
+    b = Bastion()
+    b.main()
