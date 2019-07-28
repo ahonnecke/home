@@ -8,21 +8,27 @@ from subprocess import call
 import git
 from github import Github, GithubException
 
-parser = argparse.ArgumentParser(description='Update a library')
+parser = argparse.ArgumentParser(description="Update a library")
 parser.add_argument(
-    '-k',
-    '--keep',
-    action='store_true',
+    "-k",
+    "--keep",
+    action="store_true",
     default=False,
-    help='Keep the local changes before performing update'
+    help="Keep the local changes before performing update",
 )
-parser.add_argument('-r', '--repo', help='Git Repository to operate on',
-                    default='/Users/ahonnecke/Code/repos/web-batch/')
-parser.add_argument('-u', '--upstream', help='Git Repository to operate on',
-                    default='upstream/master')
-parser.add_argument('-o', '--organization', help='Name of organization',
-                    default='digital-assets-data')
-parser.add_argument('library', help='an integer for the accumulator')
+parser.add_argument(
+    "-r",
+    "--repo",
+    help="Git Repository to operate on",
+    default="/Users/ahonnecke/Code/repos/web-batch/",
+)
+parser.add_argument(
+    "-u", "--upstream", help="Git Repository to operate on", default="upstream/master"
+)
+parser.add_argument(
+    "-o", "--organization", help="Name of organization", default="digital-assets-data"
+)
+parser.add_argument("library", help="an integer for the accumulator")
 args = parser.parse_args()
 repo_path = args.repo
 lib = args.library
@@ -30,20 +36,20 @@ upstream = args.upstream
 
 web_repo = git.Repo(repo_path)
 git = web_repo.git
-lock_file_name = f'{repo_path}Pipfile.lock'
+lock_file_name = f"{repo_path}Pipfile.lock"
 
-print(f'Updating {lib}')
+print(f"Updating {lib}")
 
 for remote in web_repo.remotes:
     remote.update()
 
 if not args.keep:
-    git.checkout('master')
-    git.reset('--hard', upstream)
+    git.checkout("master")
+    git.reset("--hard", upstream)
 
-os.chdir(f'{repo_path}')
+os.chdir(f"{repo_path}")
 
-g = Github(os.environ['SERVICEDADTOKEN'])
+g = Github(os.environ["SERVICEDADTOKEN"])
 
 try:
     org = g.get_organization(args.organization)
@@ -55,63 +61,63 @@ with open(lock_file_name) as lockfile:
     lockfile.close()
 
 json_data = json.loads(lock_data)
-raw_version = json_data['default'][lib]['version']
-current_version = raw_version.replace("'", "").replace('=', '')
+raw_version = json_data["default"][lib]["version"]
+current_version = raw_version.replace("'", "").replace("=", "")
 
-print(f'Current {lib} version is {current_version}')
+print(f"Current {lib} version is {current_version}")
 
 # couldn't find a good library for pipenv
-call(['pipenv', 'update', lib])
+call(["pipenv", "update", lib])
 
 with open(lock_file_name) as lockfile:
     lock_data = lockfile.read()
     lockfile.close()
 
 json_data = json.loads(lock_data)
-raw_version = json_data['default'][lib]['version']
-latest_version = raw_version.replace("'", "").replace('=', '')
+raw_version = json_data["default"][lib]["version"]
+latest_version = raw_version.replace("'", "").replace("=", "")
 
-print(f'Latest {lib} version is {latest_version}')
+print(f"Latest {lib} version is {latest_version}")
 
-call(['git', 'fetch', '--all'])
-git.fetch('--all')
-remote_branches = git.branch('-r')
+call(["git", "fetch", "--all"])
+git.fetch("--all")
+remote_branches = git.branch("-r")
 
 changedFiles = [item.a_path for item in web_repo.index.diff(None)]
 
 if current_version != latest_version:
     print("Pipfile.lock has changed")
-    new_branch = f'{lib}-{latest_version}'
+    new_branch = f"{lib}-{latest_version}"
 
-    full = f'origin/{new_branch}'
+    full = f"origin/{new_branch}"
     if full in remote_branches:
         print(f'"{full}" already exists... bye')
         exit(0)
 
     try:
-        git.branch('-D', new_branch)
+        git.branch("-D", new_branch)
     except BaseException:
         #         # @todo: find a better way to check for a branch
         # git.rev_parse('--verify', new_branch)
         pass
 
-    git.checkout('-b', new_branch, upstream)
+    git.checkout("-b", new_branch, upstream)
 
-    web_repo.index.add(['Pipfile.lock'])
-    git.commit('-m', f'Updating {lib} version')
-    git.push('-v', 'origin', new_branch)
+    web_repo.index.add(["Pipfile.lock"])
+    git.commit("-m", f"Updating {lib} version")
+    git.push("-v", "origin", new_branch)
 
     base = "master"
-    head = f'ahonnecke:{new_branch}'
+    head = f"ahonnecke:{new_branch}"
     print(f'Opening PR to merge "{head}" into "{base}"')
-    web_repo = org.get_repo('web')
+    web_repo = org.get_repo("web")
     web_repo.create_pull(
-        title=f'Update {lib} to version {latest_version}',
-        body=f'Scripted update for the {lib} library',
+        title=f"Update {lib} to version {latest_version}",
+        body=f"Scripted update for the {lib} library",
         base=base,
-        head=head
+        head=head,
     )
 else:
-    print(f'{lib} version is the same as in master, no PR created')
-    git.checkout('master')
-    git.reset('--hard', upstream)
+    print(f"{lib} version is the same as in master, no PR created")
+    git.checkout("master")
+    git.reset("--hard", upstream)

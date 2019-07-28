@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import argparse
 from pathlib import Path
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
@@ -43,12 +44,33 @@ class TerminalWriter:
         print(f"###############################################################")
 
 
-class Bastion(PathUtils, TerminalWriter):
-    def main(self):
-        bastion_completer = WordCompleter(b.bastion_hosts_list)
-        conf = prompt("Choose a bastion host: ", completer=bastion_completer)
+# @TODO move parser into a utils location
+class Parser:
+    _args = None
+    _parser = None
 
-        host = conf.replace("-bastion", ".conf")
+    @property
+    def args(self):
+        if not self._args:
+            self._args = self.parser.parse_args()
+        return self._args
+
+    @property
+    def parser(self):
+        if not self._parser:
+            self._parser = argparse.ArgumentParser(description="Repoint bastion tunnel")
+            self._parser.add_argument(
+                "host", help="host to point at", default=None, nargs="?"
+            )
+        return self._parser
+
+
+class Bastion(PathUtils, TerminalWriter, Parser):
+    def main(self):
+        if not self.args.host:
+            bastion_completer = WordCompleter(b.bastion_hosts_list)
+            conf = prompt("Choose a bastion host: ", completer=bastion_completer)
+            host = conf.replace("-bastion", ".conf")
 
         self.unlink(self.ssh_config_slug)
 
