@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from shutil import copyfile
+
 import os
 import argparse
 from pathlib import Path
@@ -15,6 +17,10 @@ class PathUtils:
     @property
     def ssh_config_slug(self):
         return os.path.join(self.home, ".ssh", "config")
+
+    @property
+    def common_path(self):
+        return os.path.join(self.ssh_configs_dir, "common.conf")
 
     @property
     def ssh_configs_dir(self):
@@ -76,8 +82,17 @@ class Bastion(PathUtils, TerminalWriter, Parser):
 
         dest = os.path.join(self.ssh_configs_dir, host)
 
-        self.print_header(f"{dest} -> {self.ssh_config_slug}")
-        os.symlink(dest, self.ssh_config_slug)
+        # self.print_header(f"{dest} -> {self.ssh_config_slug}")
+        # os.symlink(dest, self.ssh_config_slug)
+
+        # @TODO make this write files
+        self.print_header(f"Copying {self.common_path} {self.ssh_config_slug}")
+
+        copyfile(self.common_path, self.ssh_config_slug)
+
+        with open(self.ssh_config_slug, "a") as final:
+            with open(dest, "r") as partial:
+                final.write(partial.read())
 
 
 if __name__ == "__main__":
