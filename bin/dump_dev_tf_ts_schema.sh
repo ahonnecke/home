@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+LIMIT=${2:-10001}
+
 if [ -z "$1" ]; then
     echo "Table must be provided";
     exit 8
@@ -19,9 +21,10 @@ BASTION_HOST="dev"
 
 ~/bin/tunnel.sh "$LABEL" $LOCAL_PORT $DEST_HOST $DEST_PORT $BASTION_HOST
 
+echo $TUNNEL_DEV_PG_PW
+
 sleep 1
 
-LIMIT=10001
 USER='dev-app'
 HOST='localhost'
 DBNAME='postgres'
