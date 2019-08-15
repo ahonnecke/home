@@ -8,6 +8,15 @@ from pathlib import Path
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
+# This script with rewrite your ssh config to point a differnet basion host
+# it expectes that there exists a dir at ssh_config_list
+# and further that directory has a common.conf file that holds your ssh config that's not
+# dynamic.  Every other file in there is assumed to be a bastion host
+# Example:
+# https://github.com/ahonnecke/home/blob/master/ssh_configs/
+
+# You can just copy all those and edit the common to your taste
+
 
 class PathUtils:
     @property
