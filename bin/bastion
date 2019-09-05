@@ -82,14 +82,14 @@ class Parser:
 
 class Bastion(PathUtils, TerminalWriter, Parser):
     def main(self):
-        if not self.args.host:
+        host = self.args.host
+        if not host:
             bastion_completer = WordCompleter(b.bastion_hosts_list)
-            conf = prompt("Choose a bastion host: ", completer=bastion_completer)
-            host = conf.replace("-bastion", ".conf")
+            host = prompt("Choose a bastion host: ", completer=bastion_completer)
 
         self.unlink(self.ssh_config_slug)
 
-        dest = os.path.join(self.ssh_configs_dir, host)
+        dest = os.path.join(self.ssh_configs_dir, host.replace("-bastion", ".conf"))
 
         # self.print_header(f"{dest} -> {self.ssh_config_slug}")
         # os.symlink(dest, self.ssh_config_slug)
