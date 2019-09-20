@@ -6,8 +6,10 @@ from pathlib import Path
 from shutil import copyfile
 
 HOME = str(Path.home())
-# PROFILES = ["web", "docker", "terraform", "nodes", "ops"]
-PROFILES = ["web", "nodes"]
+
+# @TODO scrape profile for roles
+PROFILES = ["web", "docker", "terraform", "nodes", "ops"]
+# PROFILES = ["web", "nodes"]
 HOSTS = os.path.join(HOME, ".aws/hosts")
 AWS_CONF = os.path.join(HOME, ".ssh/aws.conf")
 STATIC_CONF = os.path.join(HOME, ".ssh/static.conf")
@@ -47,30 +49,13 @@ def main():
 
                 results[name] = i
 
-        for name, tags in results.items():
-            private = tags.get("PrivateIpAddress")
-            public = tags.get("PublicIpAddress")
-            keyname = tags.get("KeyName")
+    for name, tags in results.items():
+        private = tags.get("PrivateIpAddress")
+        public = tags.get("PublicIpAddress")
+        keyname = tags.get("KeyName")
 
-            # if "ashton" not in name:
-            #     continue
-            # else:
-            print(name)
-
-            if private:
-                hostmap.append({"name": name, "ip": private, "keyname": keyname})
-
-            # if public:
-            #     name = f"{name}-public"
-            #     hostmap.append({"name": name, "ip": public, "keyname": keyname})
-
-    # with open(HOSTS, "w") as hostsfile:
-    #     for host in hostmap:
-    #         ip = host.get("ip")
-    #         name = host.get("name")
-    #         hostline = f"{ip.ljust(16)}          {name}"
-    #         print(f" * {hostline}")
-    #         hostsfile.write(f"{hostline}\n")
+        if private:
+            hostmap.append({"name": name, "ip": private, "keyname": keyname})
 
     copyfile(STATIC_CONF, SSH_CONF)
 
@@ -79,12 +64,20 @@ def main():
         name = host.get("name")
         keyname = host.get("keyname").replace("-bastion", "")
 
+        # @TODO figure out how to programatically determine the OS/username on the target box
         ssh_block = f"""
 # {name} {keyname}
 Host {name}
    Hostname {ip}
    StrictHostKeyChecking no
    User ubuntu
+   IdentityFile ~/.ssh/{keyname}.pem
+   ProxyCommand ssh -W %h:%p {keyname}-bastion
+
+Host {name}
+   Hostname {ip}
+   StrictHostKeyChecking no
+   User ec2-user
    IdentityFile ~/.ssh/{keyname}.pem
    ProxyCommand ssh -W %h:%p {keyname}-bastion
 
