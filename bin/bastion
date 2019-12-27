@@ -90,6 +90,7 @@ class Bastion(PathUtils, TerminalWriter, Parser):
         self.unlink(self.ssh_config_slug)
 
         dest = os.path.join(self.ssh_configs_dir, host.replace("-bastion", ".conf"))
+        aws = os.path.join(self.home, ".ssh/aws.conf")
 
         # self.print_header(f"{dest} -> {self.ssh_config_slug}")
         # os.symlink(dest, self.ssh_config_slug)
@@ -102,6 +103,8 @@ class Bastion(PathUtils, TerminalWriter, Parser):
         with open(self.ssh_config_slug, "a") as final:
             with open(dest, "r") as partial:
                 final.write(partial.read())
+            with open(aws, "r") as awsfile:
+                final.write(awsfile.read())
 
 
 if __name__ == "__main__":
