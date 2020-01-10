@@ -2,4 +2,4 @@
 [[ "$TRACE" ]] && set -x
 set -eu -o pipefail
 
-google-chrome https://meet.google.com/yqe-yjem-hek?authuser=1
+firefox https://meet.google.com/yqe-yjem-hek?authuser=1
