@@ -1,6 +1,6 @@
 {
     "type": "script",
-    "description": "Bind Paste",
+    "description": "Bind Seatch",
     "store": {},
     "modes": [
         3
@@ -21,10 +21,11 @@
         "modifiers": [
             "<ctrl>"
         ],
-        "hotKey": "y"
+        "hotKey": "s"
     },
     "filter": {
         "regex": "google-chrome.Google-chrome",
         "isRecursive": false
     }
 }
+
