@@ -200,3 +200,5 @@ complete -C '/home/ahonnecke/.local/bin/aws_completer' aws
 ~/bin/hyperkey.sh
 
 export AWS_DEFAULT_PROFILE=web
+
+gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
