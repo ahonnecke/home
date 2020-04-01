@@ -4,7 +4,8 @@
 
 PATH=/home/ahonnecke/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
-export PATH="~/bin:$PATH"
+export PATH=/usr/local/bin/confluent/:${PATH};
+export PATH="~/bin:$PATH:./bin"
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -13,6 +14,10 @@ alias l='ls -CF'
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
+fi
+
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile
 fi
 
 # If not running interactively, don't do anything
@@ -202,3 +207,5 @@ complete -C '/home/ahonnecke/.local/bin/aws_completer' aws
 export AWS_DEFAULT_PROFILE=web
 
 gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
+
+source ~/bin/fzf-completion.bash

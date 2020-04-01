@@ -14,6 +14,10 @@ alias vi="eb"
 alias ipy='ptipython'
 alias dc='docker-compose'
 alias dcb='docker-compose build'
-alias dcu='docker-compose buils && docker-compose up'
+alias up='docker-compose up'
+alias down='docker-compose down'
 alias open='xdg-open'
 alias pip='pip3'
+
+alias web3='docker-compose run scraper /bin/bash'
+
