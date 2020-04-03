@@ -16,8 +16,9 @@ alias dc='docker-compose'
 alias dcb='docker-compose build'
 alias up='docker-compose up'
 alias down='docker-compose down'
+alias build='docker-compose build'
 alias open='xdg-open'
 alias pip='pip3'
+alias xit='exit'
 
 alias web3='docker-compose run scraper /bin/bash'
-
