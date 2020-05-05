@@ -1,11 +1,11 @@
 {
     "type": "script",
-    "description": "Chrome Bind Detach Tab",
+    "description": "Search",
     "store": {},
     "modes": [
         3
     ],
-    "usageCount": 14,
+    "usageCount": 0,
     "prompt": false,
     "omitTrigger": false,
     "showInTrayMenu": false,
@@ -19,13 +19,12 @@
     },
     "hotkey": {
         "modifiers": [
-            "<ctrl>",
-            "<shift>"
+            "<ctrl>"
         ],
-        "hotKey": "d"
+        "hotKey": "s"
     },
     "filter": {
-        "regex": "google-chrome.Google-chrome",
+        "regex": "Navigator.Firefox",
         "isRecursive": false
     }
 }

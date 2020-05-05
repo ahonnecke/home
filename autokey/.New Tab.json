@@ -1,8 +1,10 @@
 {
     "type": "script",
-    "description": "Bind End",
+    "description": "New Tab",
     "store": {},
-    "modes": [],
+    "modes": [
+        3
+    ],
     "usageCount": 0,
     "prompt": false,
     "omitTrigger": false,
@@ -16,11 +18,14 @@
         "wordChars": "[\\w]"
     },
     "hotkey": {
-        "modifiers": [],
-        "hotKey": null
+        "modifiers": [
+            "<ctrl>",
+            "<shift>"
+        ],
+        "hotKey": "t"
     },
     "filter": {
-        "regex": null,
+        "regex": "Navigator.Firefox",
         "isRecursive": false
     }
 }
