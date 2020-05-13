@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import boto3
 import os
 from pathlib import Path
+
+import boto3
 
 HOME = str(Path.home())
 PROFILES = ["web", "docker", "terraform", "nodes", "ops"]
@@ -55,4 +56,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print("This is probably not the script you want, look at ~/bin/refresh-ssh.py")
     main()
