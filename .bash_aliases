@@ -22,3 +22,9 @@ alias pip='pip3'
 alias xit='exit'
 
 alias web3='docker-compose run scraper /bin/bash'
+
+# Linux defaults, but adding for docker
+alias l='ls -CF'
+alias la='ls -A'
+alias ll='ls -alF'
+alias ls='ls --color=auto'
