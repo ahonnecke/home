@@ -5,10 +5,15 @@
 
 ROLE_NAME=$1
 
-ARN=$(grep -v region ~/.aws/config | grep -v source | grep -A1 "${ROLE_NAME}" | tail -n1)
+ARN=$(grep -v region ~/.aws/config | grep -v source | grep -A1 "profile ${ROLE_NAME}" | tail -n1)
+
+echo $ARN
 
 ACCOUNT=$(echo "$ARN" | awk -F : '{print $5}')
 MYROLENAME=$(echo "$ARN" | awk -F : '{print $6}' | awk -F / '{print $2}')
 
 PARAMS="roleName=${MYROLENAME}&account=${ACCOUNT}&displayName=${ROLE_NAME}"
-firefox https://signin.aws.amazon.com/switchrole?"${PARAMS}"
+URI="https://signin.aws.amazon.com/switchrole?${PARAMS}"
+
+echo "$URI"
+firefox "$URI"
