@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Copy docker exec command into the clipboard"""
+
+import os
+import subprocess
+
+import notify2
+import yaml
+
+HERE = os.getcwd()
+
+
+def execute(_cmd):
+    """
+        Purpose  : To execute a command and return exit status
+        Argument : cmd - command to execute
+        Return   : result, exit_code
+    """
+    process = subprocess.Popen(
+        _cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    (result, error) = process.communicate()
+    r_c = process.wait()
+    if r_c != 0:
+        print("Error: failed to execute command: ", _cmd)
+        print(error.rstrip().decode("utf-8"))
+    return result.rstrip().decode("utf-8"), error.rstrip().decode("utf-8")
+
+
+with open(os.path.join(HERE, "docker-compose.yml"), "r") as stream:
+    try:
+        services = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
+
+for service_name, config in services.get("services").items():
+    # print(service_name)
+    # pprint.pprint(config)
+    if config.get("build") == ".":
+        CMD = " ".join(["docker-compose", "run", service_name, "/bin/bash"])
+        os.system(f'echo "{CMD}" | xclip -selection clipboard')
+        msg = f"Command to start {service_name} in the clipboard now"
+        print(msg)
+        notify2.init("Docker enterer")
+        n = notify2.Notification(
+            "Ready to paste", f"Docker exec command for {service_name} is ready",
+        )
+        n.show()
