@@ -28,3 +28,8 @@ alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alF'
 alias ls='ls --color=auto'
+
+alias api='docker-compose -f ~/AutoDS/AutoDSApi/bin/docker-compose-api.yml'
+alias all='docker-compose -f ~/AutoDS/AutoDSApi/bin/docker-compose-api.yml -f ~/AutoDS/v2-frontend/bin/docker-compose-frontend.yml -f ~/AutoDS/AutoOrderApiV2/bin/docker-compose-ao-api.yml -f ~/AutoDS/AutoDSFlaskSSE/bin/docker-compose-flasksse.yaml'
+alias mysql_all='all exec db mysql -uroot -p autodsapi'
+alias mysql_api='api exec db mysql -uroot -p autodsapi'
