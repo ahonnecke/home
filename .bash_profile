@@ -1,11 +1,12 @@
 export PATH="$HOME/.pyenv/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
-export PATH="~/bin:$PATH"
+
 export PATH="~/local/bin:$PATH"
 export PATH="$PATH:./bin"
 export PATH="~/.local/bin/aws_completer:$PATH"
 PATH=/home/ahonnecke/.local/bin:/home/ahonnecke/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+export PATH="~/bin:$PATH"
 
 export AWS_SDK_LOAD_CONFIG=true
 

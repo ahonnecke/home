@@ -1,6 +1,12 @@
 __pycache__/
 *.py[cod]
+*.mypy_cache
 *$py.class
+.git/*
+.git*
+.git
+.poetry
+.pylint
 
 # C extensions
 *.so
