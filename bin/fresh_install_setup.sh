@@ -10,7 +10,7 @@ pip install --user pylint pytest flake8 mypy pre-commit isort black boto3 trepan
 
 #pull emacs
 cd ~/src/emacs/
-./configure --with-mailutils --prefix="${HOME}/local"
+./configure --with-mailutils --prefix="${HOME}/local" --with-json
 make install
 
 #pull a fresh version of prelude, reinstall stuff

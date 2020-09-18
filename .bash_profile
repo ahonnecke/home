@@ -28,3 +28,4 @@ source ~/bin/fzf-completion.bash
 
 ## AutoDS specific settings
 export AWS_PROFILE=autods
+export GPG_TTY=$(tty)
