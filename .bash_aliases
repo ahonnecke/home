@@ -47,3 +47,4 @@ alias apimongo='api exec mongodb mongo --username root --password root'
 alias reset_mysql='api up upload_shell'
 
 alias fix_home_permissions='sudo chown -R $USER:$USER *'
+alias fd=fdfind

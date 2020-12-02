@@ -2,8 +2,8 @@ import time
 
 import requests
 
-#replace me!!!
-dsl_host = 'google.com'
+# replace me!!!
+dsl_host = "google.com"
 
 global gone_start
 global gone_end
@@ -24,7 +24,7 @@ def main():
 
     while True:
         try:
-            response = requests.get(f'http://{dsl_host}/')
+            response = requests.get(f"http://{dsl_host}/")
 
             if response.status_code == 200:
                 if gone_end and not gone_start:
@@ -32,21 +32,23 @@ def main():
 
                 if down_end and not down_start:
                     down_end = time.time()
-                print(f'Got a 200 back from the healthcheck in {response.elapsed.total_seconds()} seconds')
+                print(
+                    f"Got a 200 back from the healthcheck in {response.elapsed.total_seconds()} seconds"
+                )
             else:
                 if not down_start:
                     down_start = time.time()
 
-                print(f'Got a {response.status_code} back from the healthcheck')
+                print(f"Got a {response.status_code} back from the healthcheck")
         except requests.exceptions.ConnectionError:
             if not gone_start:
                 gone_start = time.time()
             pass
 
-        time.sleep(.1)
+        time.sleep(0.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
@@ -55,15 +57,15 @@ if __name__ == '__main__':
         elif not gone_start:
             gonetime = 0
         elif not gone_end:
-            gonetime = 'forever'
+            gonetime = "forever"
 
-        print(f'Total gonetime: {gonetime}')
+        print(f"Total gonetime: {gonetime}")
 
         if down_start and down_end:
             downtime = down_end - down_start
         elif not down_start:
             downtime = 0
         elif not down_end:
-            downtime = 'forever'
+            downtime = "forever"
 
-        print(f'Total downtime: {downtime}')
+        print(f"Total downtime: {downtime}")

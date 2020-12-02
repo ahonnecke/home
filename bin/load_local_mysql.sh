@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 DEFAULTVALUE="autodsapi"
 DBNAME=${1:-$DEFAULTVALUE}
-DUMPFILE="{$HOME}/data/${DBNAME}_dump.sql";
+DUMPFILE="${HOME}/data/${DBNAME}_dump.sql";
 
 if [ ! -f "$DUMPFILE" ]; then
     echo "${DUMPFILE} does not exist"
@@ -21,8 +21,7 @@ if [[ $RESPONSE =~ ^([yY][eE][sS]|[yY])$ ]]; then
     mysql -uroot \
           -proot \
           -h 127.0.0.1 \
-          --add-drop-database \
-          --databases > "$DUMPFILE"
+          < "$DUMPFILE"
 else
     echo "Leaving existing database {$DBNAME} alone"
 fi
