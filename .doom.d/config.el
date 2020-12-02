@@ -130,7 +130,7 @@
 (global-set-key (kbd "H-; ,") 'beginning-of-buffer)
 (global-set-key (kbd "H-.") 'end-of-buffer)
 (global-set-key (kbd "H-,") 'beginning-of-buffer)
-;;(global-set-key (kbd "H d") 'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
 
 ;; ;;(global-set-key (kbd "M-o") (quote ace-window))
 ;; (define-key shell-mode-map (kbd "M-o") (quote ace-window))
@@ -153,7 +153,7 @@
 (global-set-key (kbd "H-o") 'crux-smart-open-line-above)
 
 (global-set-key (kbd "H-C-f") 'find-file)
-(global-set-key (kbd "H-f") 'fzf)
+;;(global-set-key (kbd "H-f") 'fzf)
 (global-set-key (kbd "H-o") 'browse-url-at-point)
 
 (global-set-key (kbd "C-w") 'kill-region)
