@@ -2,6 +2,4 @@
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export PYTHONSTARTUP=$HOME/.pythonrc.py
 
-#AutoDS
-export ASANA_TOKEN="1/1189303286943632:3fea6c41e9bca9f1cd527f49d100ddb1"
 chmod +x ~/bin/*
