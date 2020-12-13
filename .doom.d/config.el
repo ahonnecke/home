@@ -84,8 +84,8 @@
 ;; ;;(global-set-key (kbd "C-c p") 'switch-to-ag-buffer)
 
 ;; ;(global-set-key (kbd "M-<return>") 'hippie-expand)
-(global-set-key (kbd "H-c") 'comment-region)
-(global-set-key (kbd "H-M-u") 'uncomment-region)
+(global-set-key (kbd "H-; c") 'comment-region)
+(global-set-key (kbd "H-; u c") 'uncomment-region)
 
 (global-set-key (kbd "M-<return>") 'hippie-expand)
 
@@ -126,11 +126,10 @@
 ;; (key-chord-define-global "'." 'ace-jump-mode) ;; select characters to jump to
 ;; ;;(key-chord-define-global "''" 'save-buffer)
 ;; (key-chord-define-global ";c" 'string-inflection-all-cycle)
-(global-set-key (kbd "H-; .") 'end-of-buffer)
-(global-set-key (kbd "H-; ,") 'beginning-of-buffer)
 (global-set-key (kbd "H-.") 'end-of-buffer)
 (global-set-key (kbd "H-,") 'beginning-of-buffer)
 (global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "H-; d") 'crux-duplicate-current-line-or-region)
 
 ;; ;;(global-set-key (kbd "M-o") (quote ace-window))
 ;; (define-key shell-mode-map (kbd "M-o") (quote ace-window))
@@ -141,7 +140,7 @@
 ;; ;;(global-set-key (kbd "H-o") (quote ace-window))
 
 ;;(global-set-key (kbd "H-r") 'crux-recentf-find-file)
-(global-set-key (kbd "H-f") 'project-find-file)
+(global-set-key (kbd "H-f") 'helm-projectile-find-file)
 (global-set-key (kbd "H-r") 'recentf-open-files)
 
 (global-set-key (kbd "H-j") 'crux-top-join-line)
@@ -184,8 +183,6 @@
         (interactive "p")
         (kmacro-exec-ring-item
          (quote ([?\C-x ?1 ?\C-x ?3 ?\C-x ?3 ?\C-x ?3 ?\C-x ?+ ] 0 "%d")) arg)))
-
-(quad-screen)
 
 (global-set-key (kbd "C-c +") 'quad-screen)
 
@@ -330,3 +327,74 @@ The original function deletes trailing whitespace of the current line."
 (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
 ;; -SmallConfigs
+
+(global-set-key (kbd "H-g") 'helm-projectile-rg)
+
+(add-to-list 'projectile-globally-ignored-directories "node_modules")
+(setq projectile-indexing-method 'alien)
+
+(setq projectile-project-root "/home/ahonnecke/src/")
+
+(setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended)
+
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
+
+(add-hook 'python-mode-hook 'blacken-mode)
+
+(defun find-file-at-point-with-line (&optional filename)
+  "Opens file at point and moves point to line specified next to file name."
+  (interactive)
+  (let* ((filename (or filename (if current-prefix-arg (ffap-prompter) (ffap-guesser))))
+         (line-number
+          (and (or (looking-at ".* line \\(\[0-9\]+\\)")
+                   (looking-at "[^:]*:\\(\[0-9\]+\\)"))
+               (string-to-number (match-string-no-properties 1))))
+         (column-number
+          (or
+           (and (looking-at "[^:]*:\[0-9\]+:\\(\[0-9\]+\\)")
+                (string-to-number (match-string-no-properties 1)))
+           (let 'column-number 0))))
+
+    (let ((real (car (s-split "\\:" filename))))
+          (message "%s --> %s:%s" real line-number column-number)
+    (cond ((ffap-url-p real)
+           (let (current-prefix-arg)
+             (funcall ffap-url-fetcher real)))
+          ((and line-number
+                (file-exists-p real))
+           (progn (find-file-other-window real)
+                  ;; goto-line is for interactive use
+                  (goto-char (point-min))
+                  (forward-line (1- line-number))
+                  (forward-char column-number)))
+          ((and ffap-pass-wildcards-to-dired
+                ffap-dired-wildcards
+                (string-match ffap-dired-wildcards real))
+           (funcall ffap-directory-finder real))
+          ((and ffap-dired-wildcards
+                (string-match ffap-dired-wildcards real)
+                find-file-wildcards
+                ;; Check if it's find-file that supports wildcards arg
+                (memq ffap-file-finder '(find-file find-alternate-file)))
+           (funcall ffap-file-finder (expand-file-name real) t))
+          ((or (not ffap-newfile-prompt)
+               (file-exists-p real)
+               (y-or-n-p "File does not exist, create buffer? "))
+           (funcall ffap-file-finder
+                    ;; expand-file-name fixes "~/~/.emacs" bug sent by CHUCKR.
+                    (expand-file-name real)))
+          ;; User does not want to find a non-existent file:
+          ((signal 'file-error (list "Opening file buffer"
+                                     "no such file or directory"
+                                     real))))
+      )
+))
+
+(define-key magit-process-mode-map  (kbd "<return>") 'find-file-at-point-with-line)

@@ -32,3 +32,5 @@ source ~/bin/fzf-completion.bash
 export GPG_TTY=$(tty)
 export PATH=$PATH:$HOME/bin:$HOME/.emacs.d/bin
 source ~/.awsrc
+
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!{.venv,.git,*cache*,node_modules}'"
