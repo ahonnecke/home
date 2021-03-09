@@ -3,7 +3,7 @@
 # touch /tmp/ran
 DATE=$(date)
 WHO=$(whoami)
-echo "Executed on $DATE by $WHO" >> /tmp/hyperkey.log
+echo "Executed on $DATE by $WHO" >> /tmp/hyperkey-meta.log
 
 # date >> /tmp/hyperkey.log
 #
@@ -11,7 +11,7 @@ echo "Executed on $DATE by $WHO" >> /tmp/hyperkey.log
 
 # env > /tmp/hyperkey_env.log
 
-# export DISPLAY=":0"
+export DISPLAY=":1"
 # export XAUTHORITY="/home/user/.Xauthority"
 
 # su ahonnecke -c "xmodmap ~/.Xmodmap >/dev/null 2>&1 &"

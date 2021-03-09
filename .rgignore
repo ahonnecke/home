@@ -3,10 +3,16 @@ __pycache__/
 *.mypy_cache
 *$py.class
 .git/*
-.git*
 .git
 .poetry
 .pylint
+!.pre-commit-config.yaml
+.pytest_cache
+.coverage
+coverage.xml
 
 # C extensions
 *.so
+package-lock.json
+Pipfile.lock
+.aws-sam/*

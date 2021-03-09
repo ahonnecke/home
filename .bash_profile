@@ -19,7 +19,7 @@ export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 #export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+# export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
 export AUTHOR_NAME='Ashton Honnecke'
 export AUTHOR_EMAIL='ashton@pixelstub.com'
@@ -33,4 +33,6 @@ export GPG_TTY=$(tty)
 export PATH=$PATH:$HOME/bin:$HOME/.emacs.d/bin
 source ~/.awsrc
 
-export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!{.venv,.git,*cache*,node_modules}'"
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!{.venv,.git,*cache*,node_modules,.aws-sam }'"
+
+export DOCKER_BUILDKIT=1
