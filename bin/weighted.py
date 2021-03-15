@@ -27,6 +27,7 @@ spread = [
 spread = [
     {"amount": 40, "price": 133.15},
     {"amount": 20, "price": 79.04},
+    {"amount": 10, "price": 108.97},
 ]
 
 s = 0
