@@ -40,4 +40,6 @@ for sell in spread:
     total = total + weight
 
 average = s / sum([s["amount"] for s in spread])
-print(f"{total} at {average}")
+print(f"{total} at {average} for {total * average}")
+BTC_DELTA = 150000
+print(f"or {total * average / (BTC_DELTA)}")
