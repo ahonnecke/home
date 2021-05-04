@@ -2,4 +2,4 @@
 [[ "$TRACE" ]] && set -x
 set -eu -o pipefail
 
-firefox https://meet.google.com/yqe-yjem-hek?authuser=1
+/home/ahonnecke/bin/open_zoom.sh 2786964031
