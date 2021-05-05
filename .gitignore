@@ -1,2 +1,4 @@
+setup.cfg
 *mypy_cache*
 *__pycache__*
+*flycheck*
