@@ -16,7 +16,8 @@ sudo apt-get install python3-setuptools build-essential automake ripgrep
 ln -s ~/src/fzf/ .fzf
 #pull fzf
 
-pip install --user pylint pytest flake8 mypy pre-commit isort black boto3 trepan3k
+pip install --user pylint pytest flake8 mypy pre-commit isort black trepan3k \
+    faker argparse boto3 
 
 sudo apt install -y build-essential automake texinfo libjpeg-dev libncurses5-dev
 sudo apt install -y libtiff5-dev libgif-dev libpng-dev libxpm-dev libgtk-3-dev libgnutls28-dev
@@ -28,6 +29,7 @@ git clone git@github.com:emacs-mirror/emacs.git emacs
 ./autogen.sh
 ./configure --prefix="${HOME}/local" --with-json --with-mailutils
 make install
+cd
 
 #pull a fresh version of prelude, reinstall stuff
 
@@ -38,3 +40,5 @@ make install
 # newgrp docker
 
 sudo curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+
+sudo apt install npm
