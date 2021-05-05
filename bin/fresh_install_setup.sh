@@ -2,6 +2,16 @@
 
 # https://www.reddit.com/r/emacs/comments/7c0ry9/insall_emacs_27_from_source_ubuntu_1710_notes/
 
+cd ~/src/
+git clone git@github.com:ahonnecke/home.git
+git remote rename origin upstream
+cd
+
+cd ~/src/
+git clone https://github.com/junegunn/fzf.git
+git remote rename origin upstream
+cd
+
 sudo apt-get install python3-setuptools build-essential automake ripgrep
 ln -s ~/src/fzf/ .fzf
 #pull fzf
