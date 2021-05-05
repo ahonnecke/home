@@ -42,3 +42,5 @@ newgrp docker
 sudo curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 
 sudo ln -s /usr/bin/python3 /usr/bin/python
+
+ln -s ~/src/home/.Xmodmap ~/
