@@ -1,0 +1,12 @@
+[github]
+	user = ahonnecke
+[user]
+	email = ashton@pixelstub.com
+	name = Ashton Honnecke
+	signingkey = 54275380FD97344B
+[init]
+	templateDir = /home/ahonnecke/.git-template
+[commit]
+	gpgsign = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
