@@ -27,6 +27,7 @@ pip install --user pylint pytest flake8 mypy pre-commit isort black trepan3k \
 sudo apt install -y build-essential automake texinfo libjpeg-dev libncurses5-dev
 sudo apt install -y libtiff5-dev libgif-dev libpng-dev libxpm-dev libgtk-3-dev libgnutls28-dev
 sudo apt install -y libjansson4 libjansson-dev git
+sudo apt install -y npm flameshot
 
 #pull emacs
 cd ~/src/
@@ -58,5 +59,3 @@ sudo ln -s /usr/bin/python3 /usr/bin/python
 ln -s ~/src/home/.Xmodmap ~/
 
 sudo curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
-
-sudo apt install npm
