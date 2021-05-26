@@ -42,6 +42,7 @@ cd
 cd ~/src/
 git clone git@github.com:ahonnecke/lain-emacs.git
 cd ~/src/lain-emacs/
+git submodule init
 git submodule update --remote --merge
 
 #pull a fresh version of prelude, reinstall stuff
