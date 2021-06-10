@@ -31,3 +31,4 @@ alias ls='ls --color=auto'
 alias fix_home_permissions='sudo chown -R $USER:$USER *'
 alias fd=fdfind
 alias tf=terraform
+alias cp='cp -a'
