@@ -28,6 +28,7 @@ gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
 
 source ~/bin/fzf-completion.bash
 
+
 ## AutoDS specific settings
 export GPG_TTY=$(tty)
 export PATH=$PATH:$HOME/bin:$HOME/.emacs.d/bin
@@ -36,3 +37,4 @@ source ~/.awsrc
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden -g '!{.venv,.git,*cache*,node_modules,.aws-sam }'"
 
 export DOCKER_BUILDKIT=1
+export PATH="$HOME/.tfenv/bin:$PATH"
