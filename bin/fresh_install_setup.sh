@@ -39,13 +39,16 @@ git clone git@github.com:emacs-mirror/emacs.git emacs
 cd emacs
 
 ./autogen.sh
+# TODO try with
+# https://www.emacswiki.org/emacs/GccEmacs
+./configure --prefix="${HOME}/local" --with-json --with-mailutils --with-native-compilation
 ./configure --prefix="${HOME}/local" --with-json --with-mailutils
 make install
 cd
 
 cd ~/src/
-git clone --recurse-submodules -j8 git@github.com:ahonnecke/lain-emacs.git
-cd ~/src/lain-emacs/
+git clone --recurse-submodules -j8 git@github.com:ahonnecke/memacs
+cd ~/src/memacs/
 # git submodule init
 # git submodule update --remote --merge
 

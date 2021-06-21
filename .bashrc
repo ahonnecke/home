@@ -170,11 +170,11 @@ fi
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [ -f /home/ahonnecke/src/lambda-market-fixer/serverless/node_modules/tabtab/.completions/slss.bash ] && . /home/ahonnecke/src/lambda-market-fixer/serverless/node_modules/tabtab/.completions/slss.bash
 
-ps aux|grep emacs|grep daemon> /dev/null
+# ps aux|grep emacs|grep daemon> /dev/null
 
-if [ $? -ne 0 ]; then
-    emacsd
-fi
+# if [ $? -ne 0 ]; then
+#     emacsd
+# fi
 
 export EDITOR="emacsclient -t" # $EDITOR opens in terminal
 
@@ -207,3 +207,6 @@ complete -C '/home/ahonnecke/.local/bin/aws_completer' aws
 gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
 
 source ~/bin/fzf-completion.bash
+
+complete -C /home/ahonnecke/.tfenv/versions/`cat /home/ahonnecke/.tfenv/version`/terraform terraform
+complete -C /home/ahonnecke/.tfenv/versions/`cat /home/ahonnecke/.tfenv/version`/terraform tf
