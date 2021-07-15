@@ -38,11 +38,17 @@ cd ~/src/
 git clone git@github.com:emacs-mirror/emacs.git emacs
 cd emacs
 
+#sudo apt install libxpm-dev libgif-dev libjpeg-dev libtiff-dev libgnutls28-dev
+
+sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+sudo apt install gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson4 libjansson-dev
+
 ./autogen.sh
 # TODO try with
 # https://www.emacswiki.org/emacs/GccEmacs
 ./configure --prefix="${HOME}/local" --with-json --with-mailutils --with-native-compilation
-./configure --prefix="${HOME}/local" --with-json --with-mailutils
+./configure --prefix="${HOME}/local" --with-json --with-native-compilation
+./configure --prefix="${HOME}/local" --with-json 
 make install
 cd
 
@@ -51,8 +57,6 @@ git clone --recurse-submodules -j8 git@github.com:ahonnecke/memacs
 cd ~/src/memacs/
 # git submodule init
 # git submodule update --remote --merge
-
-#pull a fresh version of prelude, reinstall stuff
 
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo groupadd docker
